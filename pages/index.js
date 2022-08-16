@@ -1,5 +1,3 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,12 +6,12 @@ import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 
 
-
 export default function Home() {
   return (
     <>
       <Container>
-        {/* add image or something to padd space after navbar */} 
+        {/* add image or something to padd space after navbar */}
+        {/* possibly add screenshot of result when result page is finished*/} 
         <InputGroup className="mb-3 mt-5">
           <Form.Control
             placeholder="Search"
