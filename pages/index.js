@@ -16,7 +16,12 @@ export default function Home() {
         {/* Replace keydown/onclick with listener? */}
         {/* possibly put entire input group into its own component with listeners */}
         {/* have enter button or search icon pressed open search page with params passed */}
-        <InputGroup className="mb-3 mt-5">
+        {/* meta tags for title etc*/}
+        {/* Error checking for when no professor found*/}
+        {/* use searchProfessor.js to get json then give to seperate react component that maps to cards*/}
+
+        <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
+        <InputGroup >
           <Form.Control
             id="search"
             placeholder="Search"
@@ -29,7 +34,7 @@ export default function Home() {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Button>
         </InputGroup>
-        <div id="smth" className='text-center'>
+        <div id="searchbox" className='text-center'>
 
         </div>
       </Container>

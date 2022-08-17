@@ -30,7 +30,7 @@ export default function searchProfessor() {
                                           Term ${data[i].term} </a> </p>`;
         }
         document
-          .getElementById("smth")
+          .getElementById("searchbox")
           .innerHTML = out;
 
       })
