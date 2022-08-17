@@ -1,3 +1,4 @@
+import createSearchUrls from "./createSearchUrls";
 import sortStat from "./sortStat";
 export default function searchProfessor() {
     const x = document
@@ -14,15 +15,7 @@ export default function searchProfessor() {
         let out = "";
         let i;
         for (i = 0; i < data.length; i++) {
-          let resURL = new URL(window.location.href+"classResult/");
-          resURL.searchParams.append("instructor",data[i].instructor);
-          resURL.searchParams.append("term",data[i].term);
-          resURL.searchParams.append("subject",data[i].subject);
-          resURL.searchParams.append("course_number",data[i].course_number);
-          resURL.searchParams.append("class_section",data[i].class_section);
-
-          let instrURL = new URL(window.location.href+"instructorResult/");
-          instrURL.searchParams.append("instructor",data[i].instructor);
+          let {resURL, instrURL} = createSearchUrls(data,i);
           
           out += `<p class='res'>  <a href="${instrURL.href}">${data[i].instructor}</a> |  <a href= "${resURL.href}" > 
                                           ${data[i].subject} ${data[i].course_number} | 

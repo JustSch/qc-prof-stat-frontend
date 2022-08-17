@@ -29,7 +29,7 @@ export default function Home() {
             aria-label="search"
             aria-describedby="search-addon1"
             // onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}} //use only on search page not home page
-            onKeyDown={(e) => {if (typeof window !== 'undefined' && e.key==='Enter') {console.log(searchProfessor())}}}
+            onKeyDown={(e) => {if (typeof window !== 'undefined' && e.key==='Enter') {searchProfessor()}}}
           />
           <Button variant="outline-secondary" id="button-addon1" onClick={() => {if (typeof window !== 'undefined') {searchProfessor()}}}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
