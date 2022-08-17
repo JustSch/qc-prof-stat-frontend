@@ -7,7 +7,7 @@ const createSearchResult = (results) => {
             {
                 results.map((result) => (
                     <p key={() => {return `${result.instructor}-${result.subject}-${result.course_number}-${result.class_section}-${result.term}`}}>                  
-                        <Link href={createSearchUrls(result).instrURL}>
+                        <Link href={createSearchUrls(result).instrURL}> {/* SEPERATE OUT ATTRIBUTES TO DIFFERENT FUNCTIONS*/}
                             <a>{result.instructor}</a>
                         </Link>
                         {' '}
