@@ -15,7 +15,7 @@ export default function searchProfessor() {
         let out = "";
         let i;
         for (i = 0; i < data.length; i++) {
-          let {resURL, instrURL} = createSearchUrls(data,i);
+          let {resURL, instrURL} = createSearchUrls(data[i]);
           
           out += `<p class='res'>  <a href="${instrURL.href}">${data[i].instructor}</a> |  <a href= "${resURL.href}" > 
                                           ${data[i].subject} ${data[i].course_number} | 

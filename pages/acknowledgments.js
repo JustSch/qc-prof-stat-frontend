@@ -1,4 +1,4 @@
-import { Container, Row } from "react-bootstrap";
+import { Container} from "react-bootstrap";
 
 const Acknowledgments = () => {
   return (
@@ -13,8 +13,6 @@ const Acknowledgments = () => {
           <br />
           <a href="https://www.donatingplasma.org/donation/find-a-donor-center">Please Consider Donating Blood Plasma</a>
         </div>
-
-
       </Container>
     </>
   )
