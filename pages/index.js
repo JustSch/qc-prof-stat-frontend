@@ -13,15 +13,19 @@ export default function Home() {
       <Container>
         {/* add image or something to padd space after navbar */}
         {/* possibly add screenshot of result when result page is finished*/} 
+        {/* Replace keydown/onclick with listener? */}
+        {/* possibly put entire input group into its own component with listeners */}
+        {/* have enter button or search icon pressed open search page with params passed */}
         <InputGroup className="mb-3 mt-5">
           <Form.Control
             id="search"
             placeholder="Search"
             aria-label="search"
             aria-describedby="search-addon1"
-            onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}}
+            // onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}} //use only on search page not home page
+            onKeyDown={(e) => {if (typeof window !== 'undefined' && e.key==='Enter') {searchProfessor()}}}
           />
-          <Button variant="outline-secondary" id="button-addon1">
+          <Button variant="outline-secondary" id="button-addon1" onClick={() => {if (typeof window !== 'undefined') {searchProfessor()}}}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Button>
         </InputGroup>
