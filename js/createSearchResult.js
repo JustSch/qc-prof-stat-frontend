@@ -6,10 +6,8 @@ const createSearchResult = (results) => {
         return (
             <div className="resultList">
                 {
-
-                    results.map((result) => (
-                        <p key={() => { return `${result.instructor}-${result.subject}-${result.course_number}-${result.class_section}-${result.term}` }}>
-                            {console.log(`${result.instructor}-${result.subject}-${result.course_number}-${result.class_section}-${result.term}`)}
+                    results.map((result,index) => (
+                        <p key={index}>
                             <Link href={createInstrURL(result)}>
                                 <a>{result.instructor}</a>
                             </Link>
