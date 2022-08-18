@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import createInstrURL from "./createInstrURL";
-import createResURL from './createResURL';
+import createResURL from './createResURLOld';
 const createSearchResult = (results) => {
     if (results) {
         return (
@@ -8,7 +8,7 @@ const createSearchResult = (results) => {
                 {
                     results.map((result,index) => (
                         <p key={index}>
-                            <Link href={createInstrURL(result)}>
+                            <Link href={createInstrURL(result.instructor)}>
                                 <a>{result.instructor}</a>
                             </Link>
                             {' '}

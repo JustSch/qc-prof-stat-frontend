@@ -1,5 +1,5 @@
 export default function createInstrURL(data){
     let instrURL = new URL(window.location.href+"instructorResult/");
-    instrURL.searchParams.append("instructor",data.instructor);
+    instrURL.searchParams.append("instructor",data);
     return instrURL;
 }

@@ -1,6 +1,6 @@
-export default function createResURL(data,instructor) {
+export default function createResURL(data) {
     let resURL = new URL(window.location.href + "classResult/");
-    resURL.searchParams.append("instructor", instructor);
+    resURL.searchParams.append("instructor", data.instructor);
     resURL.searchParams.append("term", data.term);
     resURL.searchParams.append("subject", data.subject);
     resURL.searchParams.append("course_number", data.course_number);
