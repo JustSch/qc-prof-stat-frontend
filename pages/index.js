@@ -5,9 +5,8 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 import searchProfessor from '../js/searchProfessor';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useSearchResult from '../js/useSearchResult';
-import createSearchResult from '../js/createSearchResult';
 import createGroupSearchResult from '../js/createGroupSearchResults'
 
 
@@ -32,6 +31,7 @@ export default function Home() {
 
         {/* Have message when empty and unknown professor on search page (detects onchange)*/}
         {/* Homepage will have error when user attempts search ie: button or pressing enter (does not use onchange)*/}
+        {/* unknown professor is 404. empty textbox or searchName state null is empty input*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
