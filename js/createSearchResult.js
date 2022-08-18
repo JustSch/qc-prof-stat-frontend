@@ -16,7 +16,7 @@ const createSearchResult = (results) => {
                             {' '}
                             <Link href={createResURL(result)}>
                                 <a>
-                                    {result.subject} | {result.course_number} | {result.class_section} | {result.term}
+                                    {result.subject} {result.course_number} | Section {result.class_section} | Term {result.term}
                                 </a>
                             </Link>
                         </p>

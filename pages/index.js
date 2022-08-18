@@ -8,6 +8,7 @@ import searchProfessor from '../js/searchProfessor';
 import { useEffect, useState } from 'react';
 import useSearchResult from '../js/useSearchResult';
 import createSearchResult from '../js/createSearchResult';
+import createGroupSearchResult from '../js/createGroupSearchResults'
 
 
 export default function Home() {
@@ -27,6 +28,8 @@ export default function Home() {
 
         {/* Error message when empty or hook will get 404*/}
         {/* React hooks are slow maybe dont use?*/}
+        {/* /have it grouped by professor ie cardheader is professor with class links below it*/}
+        {/* when search empty on search page redirect to homepage? probably best to just have error*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
@@ -43,8 +46,8 @@ export default function Home() {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Button>
         </InputGroup>
-        <div id="searchbox" className='text-center'>
-          {resultJSON && createSearchResult(resultJSON)}
+        <div id="searchbox" className=''>
+          {resultJSON && createGroupSearchResult(resultJSON)}
         </div>
       </Container>
 
