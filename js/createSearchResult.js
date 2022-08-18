@@ -1,5 +1,6 @@
-import createSearchUrls from "./createSearchUrls";
 import Link from 'next/link';
+import createInstrURL from "./createInstrURL";
+import createResURL from './createResURL';
 const createSearchResult = (results) => {
     
     return (
@@ -7,13 +8,13 @@ const createSearchResult = (results) => {
             {
                 results.map((result) => (
                     <p key={() => {return `${result.instructor}-${result.subject}-${result.course_number}-${result.class_section}-${result.term}`}}>                  
-                        <Link href={createSearchUrls(result).instrURL}> {/* SEPERATE OUT ATTRIBUTES TO DIFFERENT FUNCTIONS*/}
+                        <Link href={createInstrURL(result)}> 
                             <a>{result.instructor}</a>
                         </Link>
                         {' '}
                         |
                         {' '}
-                        <Link href={createSearchUrls(result).resURL}>
+                        <Link href={createResURL(result)}>
                             <a>
                                 {result.subject} | {result.course_number} | {result.class_section} | {result.term}
                             </a>
