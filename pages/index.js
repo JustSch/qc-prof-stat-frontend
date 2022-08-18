@@ -25,6 +25,7 @@ export default function Home() {
         {/* use searchProfessor.js to get json then give to seperate react component that maps to cards*/}
         {/* Do something like https://bobbyhadz.com/blog/react-pass-function-as-prop and check tutorial*/}
         {/* FIX KEY ERRORS!*/}
+        {/* React hooks are slow maybe dont use?*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
