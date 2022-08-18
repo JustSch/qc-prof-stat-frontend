@@ -23,13 +23,15 @@ export default function Home() {
         {/* have enter button or search icon pressed open seperate search page with params passed */}
         {/* meta tags for title etc*/}
         {/* Error checking for when no professor found*/}
-        {/* use searchProfessor.js to get json then give to seperate react component that maps to cards*/}
         {/* Do something like https://bobbyhadz.com/blog/react-pass-function-as-prop and check tutorial*/}
 
         {/* Error message when empty or hook will get 404*/}
         {/* React hooks are slow maybe dont use?*/}
         {/* /have it grouped by professor ie cardheader is professor with class links below it*/}
         {/* when search empty on search page redirect to homepage? probably best to just have error*/}
+
+        {/* Have message when empty and unknown professor on search page (detects onchange)*/}
+        {/* Homepage will have error when user attempts search ie: button or pressing enter (does not use onchange)*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
