@@ -4,8 +4,9 @@ import sortStat from "./sortStat";
 export default function useSearchResult(search) {
     const [data,setData] = useState(null);
     useEffect(() => {
-        const url = "/instructor/" + search;
-        fetch(url)
+        if (search) {
+            const url = "/instructor/" + search;
+            fetch(url)
             .then(function (response) {
                 return response.json();
             })
@@ -15,6 +16,8 @@ export default function useSearchResult(search) {
             .catch(function (err) {
                 console.log(err);
             });
+        }
+        
     },[search]);
 
     return data;
