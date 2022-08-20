@@ -5,7 +5,7 @@ export default function useSearchResult(search) {
     const [data,setData] = useState(null);
     useEffect(() => {
         if (search) {
-            const url = "/instructor/" + search;
+            const url = "/api/instructor/" + search;
             fetch(url)
             .then(function (response) {
                 return response.json();

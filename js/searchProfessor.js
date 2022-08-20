@@ -4,7 +4,7 @@ export default function searchProfessor() {
     const x = document
       .getElementById("search")
       .value;
-    const url = "/instructor/" + x;
+    const url = "/api/instructor/" + x;
 
     fetch(url)
       .then(function (response) {
