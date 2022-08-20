@@ -32,6 +32,7 @@ export default function Home() {
         {/* Have message when empty and unknown professor on search page (detects onchange)*/}
         {/* Homepage will have error when user attempts search ie: button or pressing enter (does not use onchange)*/}
         {/* unknown professor is 404. empty textbox or searchName state null is empty input*/}
+        {/* For Incomplete	Total Enrollment (TE)	Withdrawals (WD)	TE - WD* put in pie chart TE in header with I and WD and total graded (TE - I - WD)in pie chart*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
@@ -42,11 +43,11 @@ export default function Home() {
             aria-describedby="search-addon1"
             onChange={(e) => {setSearchName(e.target.value)}}
             // onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}} //use only on search page not home page
-            onKeyDown={(e) => { if (typeof window !== 'undefined' && e.key === 'Enter')  { console.log() }}}
+            //onKeyDown={(e) => { if (typeof window !== 'undefined' && e.key === 'Enter')  { console.log() }}}
           />
-          <Button variant="outline-secondary" id="button-addon1" onClick={() => { if (typeof window !== 'undefined') { searchProfessor() } }}>
+          {/* <Button variant="outline-secondary" id="button-addon1" onClick={() => { if (typeof window !== 'undefined') { searchProfessor() } }}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </Button>
+          </Button> */}
         </InputGroup>
         <div id="searchbox" className=''>
           {resultJSON && createGroupSearchResult(resultJSON)}
