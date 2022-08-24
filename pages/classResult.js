@@ -27,10 +27,24 @@ ChartJS.register(
 );
 export default function ClassResult() {
     let router = useRouter();
-    const [barData, setBarData] = useState(dataItem([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-    const [instrURL,setinstrURL] = useState('');
-    const [classDescr,setClassDescr] = useState('');
-
+    const [barData, setBarData] = useState(dataItem([
+        "A+",
+        "A",
+        "A-",
+        "B+",
+        "B",
+        "B-",
+        "C+",
+        "C",
+        "Pass",
+        "C-",
+        "D",
+        "F"
+    ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+    const [instrURL, setinstrURL] = useState('');
+    const [classDescr, setClassDescr] = useState('');
+    const [doughnutData, setDoughnutData] = useState(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [0, 0, 0]));
+    const [dOptions,setDOptions] = useState(DoughnutOptions(''));
     let classParams = router.query;
     let instr = classParams["instructor"];
 
@@ -38,7 +52,7 @@ export default function ClassResult() {
 
     useEffect(() => {
         let indexValue = 0;
-        if (result && result["message"] !== 'Error retrieving [object Object].' && result["message"] !== ' not found: [object Object].') {       
+        if (result && result["message"] !== 'Error retrieving [object Object].' && result["message"] !== ' not found: [object Object].') {
             let specArray = [
                 result[indexValue].A_plus,
                 result[indexValue].A,
@@ -53,22 +67,38 @@ export default function ClassResult() {
                 result[indexValue].D,
                 result[indexValue].F
             ];
-            setBarData(dataItem(specArray));
+            setBarData(dataItem([
+                "A+",
+                "A",
+                "A-",
+                "B+",
+                "B",
+                "B-",
+                "C+",
+                "C",
+                "Pass",
+                "C-",
+                "D",
+                "F"
+            ], specArray));
             setinstrURL(createInstrURL(instr));
             setClassDescr(result[indexValue].course_desc);
+            let totalGraded = result[indexValue].total_enrollment - result[indexValue].Withdrawal - result[indexValue].inc_ng;
+            setDOptions(DoughnutOptions(`Total Enrollment: ${result[indexValue].total_enrollment} Students`));
+            setDoughnutData(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]));
 
         }
 
-    }, [result,instr])
+    }, [result, instr])
 
 
     return (
         <>
             <Container>
-                <h4 className="text-center">{`${classParams["term"]} `},              
-                <Link href={instrURL}>
-                    <a>{instr}. ,</a>
-                </Link>                
+                <h4 className="text-center">{`${classParams["term"]} `},
+                    <Link href={instrURL}>
+                        <a>{instr}. ,</a>
+                    </Link>
                     {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
                 </h4>
                 <Row className="align-items-center">
@@ -76,34 +106,21 @@ export default function ClassResult() {
                         <Bar data={barData} options={options} />
                     </Col>
                     <Col>
-                        <Doughnut data={barData} options={DoughnutOptions}/>
+                        <Doughnut data={doughnutData} options={dOptions} />
                     </Col>
                 </Row>
-                
+
                 {/*Donut chart for data that was in table */}
-                
+
             </Container>
         </>
     );
 }
 
 
-const dataItem = function (resultItem) {
+const dataItem = function (label, resultItem) {
     return {
-        labels: [
-            "A+",
-            "A",
-            "A-",
-            "B+",
-            "B",
-            "B-",
-            "C+",
-            "C",
-            "Pass",
-            "C-",
-            "D",
-            "F"
-        ],
+        labels: label,
         datasets: [
             {
                 label: "# of Individual Grades",
@@ -156,26 +173,28 @@ const options = {
     },
 }
 
-export const DoughnutOptions = {
-    plugins: {
-      legend: {
-         onClick: null,
-         labels: {
-          generateLabels: (chart) => {
-            const datasets = chart.data.datasets;
-            return datasets[0].data.map((data, i) => ({
-              text: `${chart.data.labels[i]} ${data} Students`,
-              fillStyle: datasets[0].backgroundColor[i],
-            }))
-          }
-        },
-        position: 'bottom'
-      },
-      title: {
-        display: true,
-        text: 'Total Enrollment'},
-  }
-  
-  }
+export const DoughnutOptions = function (title) {
+    return {
+        plugins: {
+            legend: {
+                onClick: null,
+                labels: {
+                    generateLabels: (chart) => {
+                        const datasets = chart.data.datasets;
+                        return datasets[0].data.map((data, i) => ({
+                            text: `${chart.data.labels[i]}: ${data} Students`,
+                            fillStyle: datasets[0].backgroundColor[i],
+                        }))
+                    }
+                },
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: title
+            },
+        }
+    }
+}
 
 
