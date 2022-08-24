@@ -26,13 +26,11 @@ export default function Home() {
 
         {/* Error message when empty or hook will get 404*/}
         {/* React hooks are slow maybe dont use?*/}
-        {/* /have it grouped by professor ie cardheader is professor with class links below it*/}
         {/* when search empty on search page redirect to homepage? probably best to just have error*/}
 
         {/* Have message when empty and unknown professor on search page (detects onchange)*/}
         {/* Homepage will have error when user attempts search ie: button or pressing enter (does not use onchange)*/}
         {/* unknown professor is 404. empty textbox or searchName state null is empty input*/}
-        {/* For Incomplete	Total Enrollment (TE)	Withdrawals (WD)	TE - WD* put in pie chart TE in header with I and WD and total graded (TE - I - WD)in pie chart*/}
 
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">

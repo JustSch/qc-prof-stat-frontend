@@ -109,9 +109,6 @@ export default function ClassResult() {
                         <Doughnut data={doughnutData} options={dOptions} />
                     </Col>
                 </Row>
-
-                {/*Donut chart for data that was in table */}
-
             </Container>
         </>
     );
