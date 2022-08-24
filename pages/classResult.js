@@ -95,7 +95,7 @@ export default function ClassResult() {
     return (
         <>
             <Container>
-                <h4 className="text-center">{`${classParams["term"]} `},
+                <h4 className="text-center">{`${classParams["term"]}, `}
                     <Link href={instrURL}>
                         <a>{instr}. ,</a>
                     </Link>
