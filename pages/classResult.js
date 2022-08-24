@@ -1,6 +1,6 @@
 import useClassResult from "../js/useClassResult";
 import { useRouter } from 'next/router';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -9,8 +9,9 @@ import {
     Title,
     Tooltip,
     Legend,
+    ArcElement
 } from 'chart.js';
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import createInstrURL from "../js/createInstrURL";
@@ -21,12 +22,14 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ArcElement
 );
 export default function ClassResult() {
     let router = useRouter();
-    const [results, setResults] = useState(dataItem([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+    const [barData, setBarData] = useState(dataItem([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
     const [instrURL,setinstrURL] = useState('');
+    const [classDescr,setClassDescr] = useState('');
 
     let classParams = router.query;
     let instr = classParams["instructor"];
@@ -50,8 +53,9 @@ export default function ClassResult() {
                 result[indexValue].D,
                 result[indexValue].F
             ];
-            setResults(dataItem(specArray));
+            setBarData(dataItem(specArray));
             setinstrURL(createInstrURL(instr));
+            setClassDescr(result[indexValue].course_desc);
 
         }
 
@@ -60,12 +64,24 @@ export default function ClassResult() {
 
     return (
         <>
-            <Container>               
+            <Container>
+                <h4 className="text-center">{`${classParams["term"]} `},              
                 <Link href={instrURL}>
-                    <a> <h2>{instr} </h2></a>
-                </Link>
-                <Bar data={results} options={options} />
+                    <a>{instr}. ,</a>
+                </Link>                
+                    {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
+                </h4>
+                <Row className="align-items-center">
+                    <Col>
+                        <Bar data={barData} options={options} />
+                    </Col>
+                    <Col>
+                        <Doughnut data={barData} options={options}/>
+                    </Col>
+                </Row>
+                
                 {/*Donut chart for data that was in table */}
+                
             </Container>
         </>
     );
