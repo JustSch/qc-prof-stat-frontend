@@ -65,6 +65,7 @@ export default function ClassResult() {
                     <a> <h2>{instr} </h2></a>
                 </Link>
                 <Bar data={results} options={options} />
+                {/*Donut chart for data that was in table */}
             </Container>
         </>
     );
