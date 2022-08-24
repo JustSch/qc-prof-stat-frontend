@@ -11,7 +11,9 @@ import {
     Legend,
 } from 'chart.js';
 import { Container } from "react-bootstrap";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import createInstrURL from "../js/createInstrURL";
 
 ChartJS.register(
     CategoryScale,
@@ -23,18 +25,17 @@ ChartJS.register(
 );
 export default function ClassResult() {
     let router = useRouter();
-    {/* SWITCH TO REACT VIS???????????????????????????????????????????????????*/ }
     const [results, setResults] = useState(dataItem([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+    const [instrURL,setinstrURL] = useState('');
 
     let classParams = router.query;
-    const chartRef = useRef();
+    let instr = classParams["instructor"];
 
     const result = useClassResult(classParams);
 
     useEffect(() => {
         let indexValue = 0;
-        if (result && result["message"] !== 'Error retrieving [object Object].' && result["message"] !== ' not found: [object Object].') {
-        
+        if (result && result["message"] !== 'Error retrieving [object Object].' && result["message"] !== ' not found: [object Object].') {       
             let specArray = [
                 result[indexValue].A_plus,
                 result[indexValue].A,
@@ -50,40 +51,25 @@ export default function ClassResult() {
                 result[indexValue].F
             ];
             setResults(dataItem(specArray));
+            setinstrURL(createInstrURL(instr));
 
         }
 
-    }, [result])
+    }, [result,instr])
 
 
     return (
         <>
-            <Container>
-                <Bar data={results} options={options} ref={chartRef} />
+            <Container>               
+                <Link href={instrURL}>
+                    <a> <h2>{instr} </h2></a>
+                </Link>
+                <Bar data={results} options={options} />
             </Container>
-
         </>
-
     );
-
 }
 
-export const dummyData = {
-    dummyData: [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    ]
-}
 
 const dataItem = function (resultItem) {
     return {
