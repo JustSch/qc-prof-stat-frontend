@@ -76,7 +76,7 @@ export default function ClassResult() {
                         <Bar data={barData} options={options} />
                     </Col>
                     <Col>
-                        <Doughnut data={barData} options={options}/>
+                        <Doughnut data={barData} options={DoughnutOptions}/>
                     </Col>
                 </Row>
                 
@@ -156,6 +156,26 @@ const options = {
     },
 }
 
-
+export const DoughnutOptions = {
+    plugins: {
+      legend: {
+         onClick: null,
+         labels: {
+          generateLabels: (chart) => {
+            const datasets = chart.data.datasets;
+            return datasets[0].data.map((data, i) => ({
+              text: `${chart.data.labels[i]} ${data} Students`,
+              fillStyle: datasets[0].backgroundColor[i],
+            }))
+          }
+        },
+        position: 'bottom'
+      },
+      title: {
+        display: true,
+        text: 'Total Enrollment'},
+  }
+  
+  }
 
 
