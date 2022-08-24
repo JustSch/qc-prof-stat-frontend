@@ -4,14 +4,14 @@ window.onload = function () {
 
 function init() {
   let instructorParams = new URL(window.location).searchParams;
-  let url = "/result/" + instructorParams.get('instructor');
+  let url = "/api/result/" + instructorParams.get('instructor');
 
   fetch(url).then(function (response) {
     return response.json();
   }).then((stat) => {return sortStat(stat)})
   .then(function (data) {
     appendDataToNavBar(data);
-    var soredtedData = sortingData(data);
+    let soredtedData = sortingData(data);
     creatingChartsAndTables(soredtedData);
   }).catch(function (err) {
     console.log(err);
@@ -19,7 +19,7 @@ function init() {
 }
 
 function sortingData(data) {
-  var map = new Map();
+  let map = new Map();
   data.forEach(element => {
     let str = `${element.subject} ${element.course_number}`;
     if (map.size === 0 || map.get(str) === undefined) {
@@ -46,7 +46,7 @@ function creatingChartsAndTables(data) {
     chartArea.appendChild(table);
 
     let selector = document.getElementById(`${key.replace(" ","")}-selector`);
-    selector.addEventListener('change',(event) => {
+    selector.addEventListener('change',() => {
       setChartAndTable(key.replace(" ",""),value,chart);
     });
     
@@ -68,7 +68,7 @@ function makeClassBar(name,desc) {
 }
 
 function makeChart(chart) {
-  var dummyData = [
+  let dummyData = [
     0,
     0,
     0,
@@ -82,8 +82,8 @@ function makeChart(chart) {
     0,
     0
   ];
-  var ctx = chart.getContext("2d");
-  var myChart = new Chart(ctx, {
+  let ctx = chart.getContext("2d");
+  return (new Chart(ctx, {
     type: "bar",
     data: {
       labels: [
@@ -169,8 +169,7 @@ function makeChart(chart) {
         ]
       }
     }
-  });
-  return myChart;
+  }))
 }
 function makeClassChartHTML(name, data) {
   let rowDiv = document.createElement("div");
@@ -314,7 +313,7 @@ function removeData(chart) {
 
 function fillChart(myChart, data, name) {
   let indexValue = document.querySelector(`#${name}-selector`).value;
-  var specArray = [
+  let specArray = [
     data[indexValue].A_plus,
     data[indexValue].A,
     data[indexValue].A_minus,
@@ -329,32 +328,4 @@ function fillChart(myChart, data, name) {
     data[indexValue].F
   ];
   addData(myChart, specArray);
-}
-
-function sortStat(stat){
-  stat.sort((a,b) => {
-    var term0 = a.term.split(' ');
-    var term1 = b.term.split(' ');
-
-    if (term0[1] === term1[1]){
-      if (term0[0] === 'Fall'){
-        if (term0[0] === term1[0]) {
-          return 0;
-        }
-        else {
-          return -1;
-        }
-      }
-      if (term0[0] === 'Spring'){
-        if (term0[0] === term1[0]) {
-          return 0;
-        }
-        else {
-          return 1;
-        }
-      }
-    }
-    return term1[1] - term0[1];
-  });
-  return stat;
 }
