@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import useSearchResult from '../js/useSearchResult';
 import createGroupSearchResult from '../js/createGroupSearchResults'
 import { useRouter } from 'next/router';
@@ -12,9 +12,14 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   let router = useRouter();
-  const [searchName, setSearchName] = useState(null); /*use this method for search page */
-  const resultJSON= useSearchResult(router.query.q);
-  
+  const resultJSON = useSearchResult(router.query.q);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    if (searchRef.current.value === '' && router.query.q) {
+      searchRef.current.value = router.query.q;
+    }
+  }, [router.query.q]);
   return (
     <>
       <Container>
@@ -22,7 +27,6 @@ export default function Home() {
         {/* possibly add screenshot of result when result page is finished*/}
 
         {/* have enter button or search icon pressed open seperate search page with params passed */}
-        {/* try to prefill search if query but only once? */}
 
         {/* Error checking for when no professor found*/}
         {/* Do something like https://bobbyhadz.com/blog/react-pass-function-as-prop and check tutorial*/}
@@ -34,7 +38,7 @@ export default function Home() {
         {/* Have message when empty and unknown professor on search page (detects onchange)*/}
         {/* Homepage will have error when user attempts search ie: button or pressing enter (does not use onchange)*/}
         {/* unknown professor is 404. empty textbox or searchName state null is empty input*/}
-        
+
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
           <Form.Control
@@ -42,10 +46,11 @@ export default function Home() {
             placeholder="Search"
             aria-label="search"
             aria-describedby="search-addon1"
-            onChange={(e) => {changeQuery(e,router)}}
-            //setSearchName(e.target.value)
-            // onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}} //use only on search page not home page
-            //onKeyDown={(e) => { if (typeof window !== 'undefined' && e.key === 'Enter')  { console.log() }}}
+            ref={searchRef}
+            onChange={(e) => { changeQuery(e, router) }}
+          //setSearchName(e.target.value)
+          // onKeyUp={() => {if (typeof window !== 'undefined') {searchProfessor()}}} //use only on search page not home page
+          //onKeyDown={(e) => { if (typeof window !== 'undefined' && e.key === 'Enter')  { console.log() }}}
           />
           {/* <Button variant="outline-secondary" id="button-addon1" onClick={() => { if (typeof window !== 'undefined') { searchProfessor() } }}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
