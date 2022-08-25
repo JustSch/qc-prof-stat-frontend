@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Card, ListGroup } from 'react-bootstrap';
-import createInstrURL from "./createInstrURL";
 import createResURL from './createResURL';
 const createGroupSearchResult = (results) => {
     if (results) {
@@ -9,9 +8,7 @@ const createGroupSearchResult = (results) => {
                 {
                     Object.keys(results).map((result, index) => (
                         <Card className='mt-2 mb-2' key={index}>
-                            <Card.Header><Link href={createInstrURL(result)}>
-                                <a>{result} </a>
-                            </Link></Card.Header>
+                            <Card.Header> {result}</Card.Header>
                             <ListGroup variant="flush">
                                 {
                                     results[result].classes.map((classItem, index1) => (

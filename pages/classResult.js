@@ -13,8 +13,6 @@ import {
 } from 'chart.js';
 import { Col, Container, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import createInstrURL from "../js/createInstrURL";
 
 ChartJS.register(
     CategoryScale,
@@ -41,7 +39,6 @@ export default function ClassResult() {
         "D",
         "F"
     ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-    const [instrURL, setinstrURL] = useState('');
     const [classDescr, setClassDescr] = useState('');
     const [doughnutData, setDoughnutData] = useState(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [0, 0, 0]));
     const [dOptions, setDOptions] = useState(DoughnutOptions(''));
@@ -81,7 +78,6 @@ export default function ClassResult() {
                 "D",
                 "F"
             ], specArray));
-            setinstrURL(createInstrURL(instr));
             setClassDescr(result[indexValue].course_desc);
             let totalGraded = result[indexValue].total_enrollment - result[indexValue].Withdrawal - result[indexValue].inc_ng;
             setDOptions(DoughnutOptions(`Total Enrollment: ${result[indexValue].total_enrollment} Students`));
@@ -89,7 +85,7 @@ export default function ClassResult() {
 
         }
 
-    }, [result, instr])
+    }, [result])
 
 
     return (
@@ -99,9 +95,7 @@ export default function ClassResult() {
                 {!error &&
                     <div>
                         <h4 className="text-center">{`${classParams["term"]}, `}
-                            <Link href={instrURL}>
-                                <a>{instr}. ,</a>
-                            </Link>
+                            {instr}. ,
                             {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
                         </h4>
                         <Row className="align-items-center">
