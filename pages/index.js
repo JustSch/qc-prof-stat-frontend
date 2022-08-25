@@ -12,9 +12,9 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   let router = useRouter();
-  const resultJSON = useSearchResult(router.query.q);
+   
+  const {data: resultJSON, error}= useSearchResult(router.query.q);
   const searchRef = useRef(null);
-
   useEffect(() => {
     if (searchRef.current.value === '' && router.query.q) {
       searchRef.current.value = router.query.q;
@@ -57,6 +57,7 @@ export default function Home() {
           </Button> */}
         </InputGroup>
         <div id="searchbox" className=''>
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
           {resultJSON && createGroupSearchResult(resultJSON)}
         </div>
       </Container>
