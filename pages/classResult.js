@@ -44,11 +44,11 @@ export default function ClassResult() {
     const [instrURL, setinstrURL] = useState('');
     const [classDescr, setClassDescr] = useState('');
     const [doughnutData, setDoughnutData] = useState(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [0, 0, 0]));
-    const [dOptions,setDOptions] = useState(DoughnutOptions(''));
+    const [dOptions, setDOptions] = useState(DoughnutOptions(''));
     let classParams = router.query;
     let instr = classParams["instructor"];
 
-    const result = useClassResult(classParams);
+    const { data: result, error } = useClassResult(classParams);
 
     useEffect(() => {
         let indexValue = 0;
@@ -95,20 +95,25 @@ export default function ClassResult() {
     return (
         <>
             <Container>
-                <h4 className="text-center">{`${classParams["term"]}, `}
-                    <Link href={instrURL}>
-                        <a>{instr}. ,</a>
-                    </Link>
-                    {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
-                </h4>
-                <Row className="align-items-center">
-                    <Col>
-                        <Bar data={barData} options={options} />
-                    </Col>
-                    <Col>
-                        <Doughnut data={doughnutData} options={dOptions} />
-                    </Col>
-                </Row>
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                {!error &&
+                    <div>
+                        <h4 className="text-center">{`${classParams["term"]}, `}
+                            <Link href={instrURL}>
+                                <a>{instr}. ,</a>
+                            </Link>
+                            {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
+                        </h4>
+                        <Row className="align-items-center">
+                            <Col>
+                                <Bar data={barData} options={options} />
+                            </Col>
+                            <Col>
+                                <Doughnut data={doughnutData} options={dOptions} />
+                            </Col>
+                        </Row>
+                    </div>
+                }
             </Container>
         </>
     );
