@@ -32,12 +32,12 @@ jobs:
       - name: export
         run: npm run export
        
-      - name: Pushes test file
+      - name: Pushes Folder
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source_file: '/out'
+          source_file: './out'
           destination_repo: ${{ secrets.REPO }}
           destination_branch: 'master'
           user_email: ${{ secrets.EMAIL }}
