@@ -7,7 +7,8 @@ const NavbarElement = () => {
         <Navbar bg="light" variant="light" expand="lg">
             <Container>                
                 <Navbar.Brand href="/">
-                    QC Prof Stat
+                    <text className="qc"> QC </text> 
+                    Prof Stat
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
