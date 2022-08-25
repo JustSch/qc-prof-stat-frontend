@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
+import { useState } from 'react';
 import useSearchResult from '../js/useSearchResult';
 import createGroupSearchResult from '../js/createGroupSearchResults'
 import { useRouter } from 'next/router';
@@ -11,6 +12,7 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   let router = useRouter();
+  const [searchName, setSearchName] = useState(null); /*use this method for search page */
   const resultJSON= useSearchResult(router.query.q);
   
   return (
