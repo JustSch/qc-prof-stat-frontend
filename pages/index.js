@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import useSearchResult from '../js/useSearchResult';
 import createGroupSearchResult from '../js/createGroupSearchResults'
 import { useRouter } from 'next/router';
