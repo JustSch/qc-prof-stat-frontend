@@ -19,6 +19,7 @@ export default function Home() {
   useEffect(() => {
     if (searchRef.current.value === '' && router.query.q) {
       searchRef.current.value = router.query.q;
+      setSearchValue(router.query.q);
     }
   }, [router.query.q]);
   return (
