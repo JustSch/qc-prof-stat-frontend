@@ -40,7 +40,7 @@ export default function ClassResult() {
         "F"
     ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
     const [classDescr, setClassDescr] = useState('');
-    const [doughnutData, setDoughnutData] = useState(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [0, 0, 0]));
+    const [doughnutData, setDoughnutData] = useState(dataItem(["Received Grade", "Withdrawals", "Incomplete"], [0, 0, 0]));
     const [dOptions, setDOptions] = useState(DoughnutOptions(''));
     let classParams = router.query;
     let instr = classParams["instructor"];
@@ -81,7 +81,7 @@ export default function ClassResult() {
             setClassDescr(result[indexValue].course_desc);
             let totalGraded = result[indexValue].total_enrollment - result[indexValue].Withdrawal - result[indexValue].inc_ng;
             setDOptions(DoughnutOptions(`Total Enrollment: ${result[indexValue].total_enrollment} Students`));
-            setDoughnutData(dataItem(["Total Graded", "Withdrawals", "Incomplete"], [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]));
+            setDoughnutData(dataItem(["Received Grade", "Withdrawals", "Incomplete"], [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]));
 
         }
 
