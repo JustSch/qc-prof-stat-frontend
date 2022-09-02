@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: production
-      url: ${{ steps.deploy-to-firebase.outputs.details_url }}
+      url: https://qc-prof-stat.web.app/
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
