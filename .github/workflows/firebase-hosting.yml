@@ -23,7 +23,8 @@ jobs:
         run: npm install
       - name: build project
       - run: npm run predeploy
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_QC_PROF_STAT }}'
