@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: production
-      url: https://qc-prof-stat.web.app/
+      url: ${{ steps.deploy-to-firebase.outputs.details_url }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -28,7 +28,7 @@ jobs:
         run: npm run predeploy
       - name: Deploy to Firebase
         id: deploy-to-firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: JustSch/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_QC_PROF_STAT }}'
