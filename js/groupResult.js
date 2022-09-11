@@ -1,4 +1,9 @@
 export default function groupResult (results) {
+    if (typeof Object.hasOwn !== "function") {
+        Object.hasOwn = function (obj, characteristic)  {
+            return obj.hasOwnProperty(characteristic);
+        };
+    }
     let res = {};    
     for (let result of results){
         if (Object.hasOwn(res,result.instructor)) {
