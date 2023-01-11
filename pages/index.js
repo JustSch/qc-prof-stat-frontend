@@ -8,6 +8,7 @@ import { useRef, useEffect, useState } from 'react';
 import useSearchResult from '../js/useSearchResult';
 import createGroupSearchResult from '../js/createGroupSearchResults';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 
 export default function Home() {
@@ -24,6 +25,11 @@ export default function Home() {
   }, [router.query.q]);
   return (
     <>
+      <Head>
+      <meta property="og:title" content="QC Prof Stat" />
+      <meta property="og:description" content="Allows Students to see grading distributions" />
+      <meta property="og:url" content="https://qc-prof-stat.web.app" />
+      </Head>
       <Container>
         <p className="mb-3 mt-5 text-center">Search For a Professor By Their Last Name Or Last Name, First Initial</p>
         <InputGroup className="mb-3">
