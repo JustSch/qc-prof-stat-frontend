@@ -9,9 +9,9 @@ const Acknowledgments = () => {
           <br />
           Originally Created by Sabeet A. Chowdhury
           <br />
-          Database last updated for Spring 2022
+          Database last updated for Fall 2022
           <br />
-          <a href="https://www.donatingplasma.org/donation/find-a-donor-center">Please Consider Donating Blood Plasma</a>
+          <a href="https://www.plasmahero.org">Please Consider Donating Blood Plasma</a>
         </div>
       </Container>
     </>
