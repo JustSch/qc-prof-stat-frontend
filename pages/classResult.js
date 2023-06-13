@@ -81,7 +81,7 @@ export default function ClassResult() {
             setClassDescr(result[indexValue].course_desc);
             let totalGraded = result[indexValue].total_enrollment - result[indexValue].Withdrawal - result[indexValue].inc_ng;
             setDOptions(DoughnutOptions(`Total Enrollment: ${result[indexValue].total_enrollment} Students`));
-            setDoughnutData(dataItem(["Received Grade", "Withdrawals", "Incomplete"], [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]));
+            setDoughnutData(doughnutDataItem(["Received Grade", "Withdrawals", "Incomplete"], [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]));
 
         }
 
@@ -169,6 +169,29 @@ const options = {
     },
 }
 
+const doughnutDataItem = function (label, resultItem) {
+    return {
+        labels: label,
+        datasets: [
+            {
+                label: "# of Individual Grades",
+                data: resultItem,
+                backgroundColor: [                   
+                    "rgba(0,250,41,0.2)",
+                    "rgba(250,0,3,0.2)",
+                    "rgba(216,178,27,0.2)",
+                ],
+                borderColor: [
+                    "rgba(0,250,41,1)",
+                    "rgba(250,0,3,1)",  
+                    "rgba(216,178,27,1)",
+                ],
+                borderWidth: 2
+
+            }
+        ]
+    }
+}
 export const DoughnutOptions = function (title) {
     return {
         plugins: {
