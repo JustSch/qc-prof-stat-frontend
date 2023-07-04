@@ -13,7 +13,7 @@ const NavbarElement = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Link href="/acknowledgments" passHref>
+                        <Link href="/acknowledgments" legacyBehavior passHref>
                             <Nav.Link>
                                 acknowledgments
                             </Nav.Link>
