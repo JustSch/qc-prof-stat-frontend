@@ -26,8 +26,5 @@
   "devDependencies": {
     "eslint": "8.52.0",
     "eslint-config-next": "13.5.6"
-  },
-  "overrides": {
-    "semver": "7.5.2"
   }
 }
