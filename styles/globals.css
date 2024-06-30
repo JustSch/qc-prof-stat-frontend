@@ -10,10 +10,6 @@ a {
   color: inherit;
   text-decoration: none;
 }
-a.nav-link {
-  color: gray;
-  text-decoration: none;
-}
 .qc {
   color: rgb(252, 74, 74);
 }
