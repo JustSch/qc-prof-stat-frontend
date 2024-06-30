@@ -11,14 +11,12 @@ const NavbarElement = () => {
                     Prof Stat
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
+                <Navbar.Collapse id="basic-navbar-nav">              
                         <Link href="/acknowledgments" legacyBehavior passHref>
-                            <Nav.Link>
+                            <Nav.Link >
                                 acknowledgments
                             </Nav.Link>
-                        </Link>
-                    </Nav>
+                        </Link>                
                 </Navbar.Collapse>
             </Container>
         </Navbar>
