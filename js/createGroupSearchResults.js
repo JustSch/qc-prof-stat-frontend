@@ -14,9 +14,7 @@ const createGroupSearchResult = (results) => {
                                     results[result].classes.map((classItem, index1) => (
                                         <ListGroup.Item key={index1}>
                                             <Link href={createResURL(classItem, result)}>
-                                                <a>
-                                                    {classItem.subject} {classItem.course_number} | Section {classItem.class_section} | Term {classItem.term}
-                                                </a>
+                                                {classItem.subject} {classItem.course_number} | Section {classItem.class_section} | Term {classItem.term}
                                             </Link>
                                         </ListGroup.Item>
                                     ))

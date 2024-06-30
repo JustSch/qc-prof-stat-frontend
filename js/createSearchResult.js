@@ -9,15 +9,13 @@ const createSearchResult = (results) => {
                     results.map((result,index) => (
                         <p key={index}>
                             <Link href={createInstrURL(result.instructor)}>
-                                <a>{result.instructor}</a>
+                                {result.instructor}
                             </Link>
                             {' '}
                             |
                             {' '}
                             <Link href={createResURL(result)}>
-                                <a>
-                                    {result.subject} {result.course_number} | Section {result.class_section} | Term {result.term}
-                                </a>
+                                {result.subject} {result.course_number} | Section {result.class_section} | Term {result.term}
                             </Link>
                         </p>
                     ))}
