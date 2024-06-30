@@ -27,56 +27,50 @@ export default function ClassResult() {
   const [doughnutData, setDoughnutData] = useState(
     dataItem(["Received Grade", "Withdrawals", "Incomplete"], [0, 0, 0])
   );
-  const [dOptions, setDOptions] = useState(DoughnutOptions(""));
+  const [doughnutGraphOptions, setDOptions] = useState(DoughnutOptions(""));
   let classParams = router.query;
   let instr = classParams["instructor"];
 
-  const { data: result, error } = useClassResult(classParams);
+  const { data: gradeData, error, isLoading } = useClassResult(classParams);
 
   useEffect(() => {
-    let indexValue = 0;
     if (
-      result &&
-      result["message"] !== "Error retrieving [object Object]." &&
-      result["message"] !== " not found: [object Object]."
+      gradeData &&
+      gradeData["message"] !== "Error retrieving [object Object]." &&
+      gradeData["message"] !== " not found: [object Object]."
     ) {
       let specArray = [
-        result[indexValue].A_plus,
-        result[indexValue].A,
-        result[indexValue].A_minus,
-        result[indexValue].B_plus,
-        result[indexValue].B,
-        result[indexValue].B_minus,
-        result[indexValue].C_plus,
-        result[indexValue].C,
-        result[indexValue].P,
-        result[indexValue].C_minus,
-        result[indexValue].D,
-        result[indexValue].F,
+        gradeData.A_plus,
+        gradeData.A,
+        gradeData.A_minus,
+        gradeData.B_plus,
+        gradeData.B,
+        gradeData.B_minus,
+        gradeData.C_plus,
+        gradeData.C,
+        gradeData.P,
+        gradeData.C_minus,
+        gradeData.D,
+        gradeData.F,
       ];
       setBarData(
         dataItem(["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D", "F"], specArray)
       );
-      setClassDescr(result[indexValue].course_desc);
-      let totalGraded =
-        result[indexValue].total_enrollment -
-        result[indexValue].Withdrawal -
-        result[indexValue].inc_ng;
-      setDOptions(
-        DoughnutOptions(`Total Enrollment: ${result[indexValue].total_enrollment} Students`)
-      );
+      setClassDescr(gradeData.course_desc);
+      let totalGraded = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
+      setDOptions(DoughnutOptions(`Total Enrollment: ${gradeData.total_enrollment} Students`));
       setDoughnutData(
         doughnutDataItem(
           ["Received Grade", "Withdrawals", "Incomplete"],
-          [totalGraded, result[indexValue].Withdrawal, result[indexValue].inc_ng]
+          [totalGraded, gradeData.Withdrawal, gradeData.inc_ng]
         )
       );
     }
-  }, [result]);
+  }, [gradeData]);
 
   return (
     <>
-      <Container>
+      <Container className="pb-4">
         {error && (
           <div className="alert alert-danger" role="alert">
             {error}
@@ -84,18 +78,35 @@ export default function ClassResult() {
         )}
         {!error && (
           <div>
-            <h4 className="text-center">
+            <h4 className="text-center mb-4">
               {`${classParams["term"]}, `}
               {instr}. ,
               {` ${classParams["subject"]} ${classParams["course_number"]}-${classParams["class_section"]} ${classDescr}`}
             </h4>
             <Row className="align-items-center">
-              <Col>
-                <Bar data={barData} options={options} />
-              </Col>
-              <Col>
-                <Doughnut data={doughnutData} options={dOptions} />
-              </Col>
+              {!isLoading && (
+                <>
+                  <Col>
+                    <Bar data={barData} options={barGraphOptions} height={300} />
+                  </Col>
+                  <Col>
+                    <Doughnut data={doughnutData} options={doughnutGraphOptions} />
+                  </Col>
+                </>
+              )}
+
+              {isLoading && (
+                <div className="placeholder-glow">
+                  <span className="d-block placeholder my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-75 my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-50 my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-25 my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-75 my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-50 my-3" style={{ height: 35 }}></span>
+                  <span className="d-block placeholder w-25 my-3" style={{ height: 35 }}></span>
+                </div>
+              )}
             </Row>
           </div>
         )}
@@ -145,7 +156,7 @@ const dataItem = function (label, resultItem) {
   };
 };
 
-const options = {
+const barGraphOptions = {
   elements: {
     line: {
       tension: 0.2,
@@ -154,6 +165,15 @@ const options = {
   plugins: {
     legend: {
       onClick: null,
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      suggestedMax: 10,
+      ticks: {
+        precision: 0, // prevents y-axis from representing decimal point numbers
+      },
     },
   },
 };
