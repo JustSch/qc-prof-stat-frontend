@@ -12,6 +12,8 @@ const Acknowledgments = () => {
           Database last updated with Fall 2023
           <br />
           <a href="https://www.plasmahero.org">Please Consider Donating Blood Plasma</a>
+          <br />
+          With Contributions from <a href="https://github.com/mmonj">mmonj</a> on <a href="https://github.com">github</a>
         </div>
       </Container>
     </>
