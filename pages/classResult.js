@@ -19,8 +19,8 @@ export default function ClassResult() {
   let router = useRouter();
   const [barData, setBarData] = useState(
     dataItem(
-      ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D", "F"],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+","D", "F"],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
   );
   const [classDescr, setClassDescr] = useState("");
@@ -50,11 +50,12 @@ export default function ClassResult() {
         gradeData.C,
         gradeData.P,
         gradeData.C_minus,
+        gradeData.D_plus,
         gradeData.D,
         gradeData.F,
       ];
       setBarData(
-        dataItem(["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D", "F"], specArray)
+        dataItem(["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+","D", "F"], specArray)
       );
       setClassDescr(gradeData.course_desc);
       let totalGraded = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
