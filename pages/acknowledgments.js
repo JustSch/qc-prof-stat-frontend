@@ -11,7 +11,7 @@ const Acknowledgments = () => {
           <br />
           With Contributions from <a href="https://github.com/mmonj">mmonj</a> on <a href="https://github.com">github</a>
           <br />
-          Database last updated with Fall 2024
+          Database last updated with Spring 2025
           <br />
           <a href="https://www.plasmahero.org">Please Consider Donating Blood Plasma</a>
         </div>
