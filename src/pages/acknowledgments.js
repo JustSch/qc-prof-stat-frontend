@@ -1,15 +1,18 @@
-import { Container} from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
-const Acknowledgments = () => {
+export default function Acknowledgments() {
   return (
     <>
       <Container>
         <div className="mt-2 text-center">
-          Currently Maintained By <a href="https://www.linkedin.com/in/justin-schreiber/">Justin Schreiber</a>
+          Currently Maintained By{" "}
+          <a href="https://www.linkedin.com/in/justin-schreiber/">Justin Schreiber</a>
           <br />
-          Originally Created by <a href="https://www.linkedin.com/in/sabeet/">Sabeet A. Chowdhury</a>
+          Originally Created by{" "}
+          <a href="https://www.linkedin.com/in/sabeet/">Sabeet A. Chowdhury</a>
           <br />
-          With Contributions from <a href="https://github.com/mmonj">mmonj</a> on <a href="https://github.com">github</a>
+          With Contributions from <a href="https://github.com/mmonj">mmonj</a> on{" "}
+          <a href="https://github.com">github</a>
           <br />
           Database last updated with Summer 2025
           <br />
@@ -17,7 +20,5 @@ const Acknowledgments = () => {
         </div>
       </Container>
     </>
-  )
+  );
 }
-
-export default Acknowledgments

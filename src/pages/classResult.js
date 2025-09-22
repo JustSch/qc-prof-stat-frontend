@@ -1,3 +1,10 @@
+import { useEffect, useState } from "react";
+
+import { Col, Container, Row } from "react-bootstrap";
+import { Bar, Doughnut } from "react-chartjs-2";
+
+import { useRouter } from "next/router";
+
 import {
   ArcElement,
   BarElement,
@@ -8,18 +15,16 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { Bar, Doughnut } from "react-chartjs-2";
-import useClassResult from "../utils/useClassResult";
+
+import useClassResult from "../hooks/useClassResult";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
+
 export default function ClassResult() {
   let router = useRouter();
   const [barData, setBarData] = useState(
     dataItem(
-      ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+","D", "F"],
+      ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+", "D", "F"],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
   );
@@ -55,7 +60,10 @@ export default function ClassResult() {
         gradeData.F,
       ];
       setBarData(
-        dataItem(["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+","D", "F"], specArray)
+        dataItem(
+          ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+", "D", "F"],
+          specArray
+        )
       );
       setClassDescr(gradeData.course_desc);
       let totalGraded = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
@@ -116,7 +124,7 @@ export default function ClassResult() {
   );
 }
 
-const dataItem = function (label, resultItem) {
+function dataItem(label, resultItem) {
   return {
     labels: label,
     datasets: [
@@ -155,7 +163,7 @@ const dataItem = function (label, resultItem) {
       },
     ],
   };
-};
+}
 
 const barGraphOptions = {
   elements: {
@@ -179,7 +187,7 @@ const barGraphOptions = {
   },
 };
 
-const doughnutDataItem = function (label, resultItem) {
+function doughnutDataItem(label, resultItem) {
   return {
     labels: label,
     datasets: [
@@ -192,8 +200,9 @@ const doughnutDataItem = function (label, resultItem) {
       },
     ],
   };
-};
-export const DoughnutOptions = function (title) {
+}
+
+export function DoughnutOptions(title) {
   return {
     plugins: {
       legend: {
@@ -215,4 +224,4 @@ export const DoughnutOptions = function (title) {
       },
     },
   };
-};
+}
