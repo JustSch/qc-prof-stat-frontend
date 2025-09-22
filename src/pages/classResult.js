@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Bar, Doughnut } from "react-chartjs-2";
-import useClassResult from "../js/useClassResult";
+import useClassResult from "../utils/useClassResult";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 export default function ClassResult() {

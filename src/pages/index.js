@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
 import { Button, Container, Form, InputGroup, Spinner } from 'react-bootstrap';
-import useSearchResult from '../js/useSearchResult';
-import createGroupSearchResult from '../js/createGroupSearchResults';
+import useSearchResult from '../utils/useSearchResult';
+import createGroupSearchResult from '../utils/createGroupSearchResults';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 

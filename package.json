@@ -2,6 +2,7 @@
   "name": "qc-prof-stat-frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +10,8 @@
     "export": "next export",
     "predeploy": "npm run build && npm run export",
     "deploy": "firebase deploy --only hosting",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -22,5 +24,16 @@
     "react-bootstrap": "^2.10.3",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@next/eslint-plugin-next": "^15.5.3",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "15.5.3",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-unicorn": "^61.0.2",
+    "globals": "^16.4.0"
   }
 }
