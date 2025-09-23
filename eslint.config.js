@@ -30,6 +30,7 @@ export default defineConfig([
       semi: ["error", "always"],
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       camelcase: ["error", { properties: "never", ignoreDestructuring: true }],
+      "prefer-const": ["error"],
     },
   },
   CONFIG_PLUGIN_UNICORN,

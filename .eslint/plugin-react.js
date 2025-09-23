@@ -7,7 +7,7 @@ export default defineConfig(pluginReact.configs.flat.recommended, {
   files: [JS_SRC_PATTERN],
   settings: {
     react: {
-      version: "18.3.1",
+      version: "detect",
     },
   },
   rules: {

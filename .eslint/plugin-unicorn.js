@@ -25,5 +25,6 @@ export default defineConfig(eslintPluginUnicorn.configs.recommended, {
     "unicorn/require-post-message-target-origin": "off",
     "unicorn/string-content": "off",
     "unicorn/filename-case": "off",
+    "unicorn/prefer-global-this": "off",
   },
 });
