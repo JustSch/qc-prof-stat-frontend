@@ -2,6 +2,15 @@ import { Card, Col, Row } from "react-bootstrap";
 import { Bar, Doughnut } from "react-chartjs-2";
 
 import {
+  BAR_GRAPH_OPTIONS,
+  GRADE_VALUES_TO_LABELS_MAP,
+  SUMMARY_LABELS,
+  createBarChartData,
+  createDoughnutChartData,
+  createDoughnutOptions,
+} from "@lib/utils/class-result";
+
+import {
   ArcElement,
   BarElement,
   CategoryScale,
@@ -15,28 +24,6 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 /**
- * The below keys represent the keys present in the API response for class result JSON
- * The values represent the human-readable labels for each grade category
- */
-const GRADE_VALUES_TO_LABELS_MAP = {
-  A_plus: "A+",
-  A: "A",
-  A_minus: "A-",
-  B_plus: "B+",
-  B: "B",
-  B_minus: "B-",
-  C_plus: "C+",
-  C: "C",
-  P: "Pass",
-  C_minus: "C-",
-  D_plus: "D+",
-  D: "D",
-  F: "F",
-};
-
-const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
-
-/**
  * Component to render bar and doughnut charts for class grade results
  * @param {Object} props
  * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
@@ -44,10 +31,9 @@ const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
  */
 export function ClassResultChart({ gradeData }) {
   const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
-  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key]);
+  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key] ?? "0");
 
   const barData = createBarChartData(gradeLabels, gradeCounts);
-
   const totalGradedStudents = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
 
   const doughnutData = createDoughnutChartData(SUMMARY_LABELS, [
@@ -71,7 +57,7 @@ export function ClassResultChart({ gradeData }) {
       <Card.Body className="p-2">
         <Row className="align-items-center g-4">
           <Col xs={12} lg={8} xl={7}>
-            <Bar data={barData} options={barGraphOptions} height={400} />
+            <Bar data={barData} options={BAR_GRAPH_OPTIONS} height={400} />
           </Col>
           <Col xs={12} lg={4} xl={5} className="d-flex justify-content-center">
             <div
@@ -88,105 +74,4 @@ export function ClassResultChart({ gradeData }) {
       </Card.Body>
     </Card>
   );
-}
-
-/**
- * Build a Chart.js bar chart data object for grade distribution.
- * @param {string[]} labels - Labels for the x-axis (grade categories)
- * @param {number[]} dataValues - Numeric values corresponding to each label
- * @returns {Object} - Chart.js bar data object
- */
-function createBarChartData(labels, dataValues) {
-  return {
-    labels: labels,
-    datasets: [
-      {
-        label: "# of Individual Grades",
-        data: dataValues,
-        backgroundColor: Array.from({ length: dataValues.length }).fill("rgba(22, 216, 237, 0.2)"),
-        borderColor: Array.from({ length: dataValues.length }).fill("rgba(22, 216, 237, 1)"),
-        borderWidth: 2,
-      },
-    ],
-  };
-}
-
-const barGraphOptions = {
-  responsive: true, // chart adapts to container size changes
-  maintainAspectRatio: false, // allows chart to use available height
-  plugins: {
-    legend: {
-      onClick: null, // disables legend click interactions
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        maxRotation: 45, // maximum degrees label will be rotated when attempting to justify narrower viewport
-        minRotation: 0, // minimum label rotation angle (horizontal)
-        font: {
-          size: 11,
-        },
-        maxTicksLimit: false, // removes limit on number of ticks shown
-        autoSkip: false, // prevents automatic skipping of labels when viewport is narrow
-      },
-    },
-    y: {
-      beginAtZero: true, // forces y-axis to start from zero
-      suggestedMax: 10, // suggested maximum value for y-axis
-      ticks: {
-        precision: 0, // prevents y-axis from representing decimal point numbers
-      },
-    },
-  },
-};
-
-/**
- * Build a Chart.js doughnut chart data object for summary categories.
- * @param {string[]} labels - Labels for the doughnut slices
- * @param {number[]} dataValues - Numeric values for each slice
- * @returns {Object} - Chart.js doughnut data object
- */
-function createDoughnutChartData(labels, dataValues) {
-  return {
-    labels: labels,
-    datasets: [
-      {
-        label: "# of Individual Grades",
-        data: dataValues,
-        backgroundColor: ["rgba(0,250,41,0.2)", "rgba(250,0,3,0.2)", "rgba(216,178,27,0.2)"],
-        borderColor: ["rgba(0,250,41,1)", "rgba(250,0,3,1)", "rgba(216,178,27,1)"],
-        borderWidth: 2,
-      },
-    ],
-  };
-}
-
-/**
- * Generate options object for the Doughnut chart.
- * @param {string} title - The title text to display above the chart
- * @returns {Object} - Chart.js doughnut options object
- */
-function createDoughnutOptions(title) {
-  return {
-    plugins: {
-      legend: {
-        onClick: null,
-        labels: {
-          generateLabels: (chart) => {
-            const datasets = chart.data.datasets;
-            return datasets[0].data.map((data, i) => ({
-              text: `${chart.data.labels[i]}: ${data} Students`,
-              fillStyle: datasets[0].backgroundColor[i],
-            }));
-          },
-        },
-        position: "bottom",
-      },
-      title: {
-        display: true,
-        text: title,
-      },
-    },
-  };
 }
