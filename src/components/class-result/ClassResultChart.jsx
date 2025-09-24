@@ -61,20 +61,28 @@ export function ClassResultChart({ gradeData }) {
   );
 
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border-0 shadow-sm py-4">
       <Card.Header className="bg-white border-0 py-3">
         <h4 className="mb-0 text-center">
           <i className="bi bi-bar-chart-fill text-primary me-2"></i>
           Grade Distribution Analysis
         </h4>
       </Card.Header>
-      <Card.Body className="p-4">
-        <Row className="align-items-center">
-          <Col>
-            <Bar data={barData} options={barGraphOptions} height={300} />
+      <Card.Body className="p-2">
+        <Row className="align-items-center g-4">
+          <Col xs={12} lg={8} xl={7}>
+            <Bar data={barData} options={barGraphOptions} height={400} />
           </Col>
-          <Col>
-            <Doughnut data={doughnutData} options={doughnutOptions} />
+          <Col xs={12} lg={4} xl={5} className="d-flex justify-content-center">
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                height: "400px",
+              }}
+            >
+              <Doughnut data={doughnutData} options={doughnutOptions} />
+            </div>
           </Col>
         </Row>
       </Card.Body>
@@ -104,20 +112,28 @@ function createBarChartData(labels, dataValues) {
 }
 
 const barGraphOptions = {
-  elements: {
-    line: {
-      tension: 0.2,
-    },
-  },
+  responsive: true, // chart adapts to container size changes
+  maintainAspectRatio: false, // allows chart to use available height
   plugins: {
     legend: {
-      onClick: null,
+      onClick: null, // disables legend click interactions
     },
   },
   scales: {
+    x: {
+      ticks: {
+        maxRotation: 45, // maximum degrees label will be rotated when attempting to justify narrower viewport
+        minRotation: 0, // minimum label rotation angle (horizontal)
+        font: {
+          size: 11,
+        },
+        maxTicksLimit: false, // removes limit on number of ticks shown
+        autoSkip: false, // prevents automatic skipping of labels when viewport is narrow
+      },
+    },
     y: {
-      beginAtZero: true,
-      suggestedMax: 10,
+      beginAtZero: true, // forces y-axis to start from zero
+      suggestedMax: 10, // suggested maximum value for y-axis
       ticks: {
         precision: 0, // prevents y-axis from representing decimal point numbers
       },
@@ -155,7 +171,7 @@ function createDoughnutOptions(title) {
   return {
     plugins: {
       legend: {
-        onClick: undefined,
+        onClick: null,
         labels: {
           generateLabels: (chart) => {
             const datasets = chart.data.datasets;
