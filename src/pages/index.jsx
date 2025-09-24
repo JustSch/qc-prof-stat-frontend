@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { Button, Container, Form, InputGroup, Spinner } from "react-bootstrap";
 
@@ -9,21 +9,35 @@ import { faGraduationCap, faMagnifyingGlass } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SearchResults } from "@lib/components/SearchResults";
-import { useSearchResult } from "@lib/hooks/useSearchResult";
+import { useNextFetch } from "@lib/hooks/useNextFetch";
 
 export default function Page() {
   const router = useRouter();
 
-  const classSearchFetchState = useSearchResult(router.query.q);
-  const searchRef = useRef(null);
-  const [searchValue, setSearchValue] = useState("");
+  const classSearchFetchState = useNextFetch(router.query, "/api/instructor/" + router.query.q);
+  const searchInputRef = useRef(null);
 
   useEffect(() => {
-    if (searchRef.current.value === "" && router.query.q) {
-      searchRef.current.value = router.query.q;
-      setSearchValue(router.query.q);
+    if (searchInputRef.current.value === "" && router.query.q) {
+      searchInputRef.current.value = router.query.q;
     }
   }, [router.query.q]);
+
+  /**
+   * Handle search form submission and update the URL query parameter.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} event - Form submit event (will call preventDefault())
+   * @param {string} searchValue - The search string to set as the `q` query parameter
+   * @returns {void}
+   */
+  function changeQuery(event, searchValue) {
+    event.preventDefault();
+
+    if (searchValue.trim() === "") return;
+
+    const href = `/?q=${searchValue}`;
+    router.push(href, href, { shallow: true });
+  }
 
   return (
     <>
@@ -59,19 +73,17 @@ export default function Page() {
               </p>
             </div>
 
-            <form onSubmit={(event) => changeQuery(event, searchValue, router)}>
+            <form onSubmit={(event) => changeQuery(event, searchInputRef.current.value)}>
               <InputGroup className="mb-4 shadow-sm">
                 <Form.Control
                   id="search"
                   placeholder="Enter professor's name..."
                   aria-label="search"
                   aria-describedby="search-addon1"
-                  ref={searchRef}
+                  ref={searchInputRef}
                   size="lg"
                   className="border-end-0"
-                  onChange={(e) => {
-                    setSearchValue(e.target.value);
-                  }}
+                  required
                 />
                 <Button
                   type="submit"
@@ -97,9 +109,9 @@ export default function Page() {
         <div className="row justify-content-center">
           <div className="col-lg-10 col-xl-8">
             <div id="searchbox">
-              {classSearchFetchState.error && (
+              {classSearchFetchState.errorMessage && (
                 <div className="alert alert-danger shadow-sm" role="alert">
-                  <strong>Oops!</strong> {classSearchFetchState.error}
+                  <strong>Oops!</strong> {classSearchFetchState.errorMessage}
                 </div>
               )}
               {classSearchFetchState.data && (
@@ -111,19 +123,4 @@ export default function Page() {
       </Container>
     </>
   );
-}
-
-/**
- * Handle search form submission and update the URL query parameter.
- *
- * @param {import('react').FormEvent<HTMLFormElement>} event - Form submit event (will call preventDefault())
- * @param {string} searchValue - The search string to set as the `q` query parameter
- * @param {import('next/router').NextRouter} router - Next.js router instance
- * @returns {void}
- */
-function changeQuery(event, searchValue, router) {
-  event.preventDefault();
-
-  const href = `/?q=${searchValue}`;
-  router.push(href, href, { shallow: true });
 }

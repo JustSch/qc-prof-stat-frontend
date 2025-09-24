@@ -1,0 +1,55 @@
+import { Card } from "react-bootstrap";
+
+import { faBookOpen, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+/**
+ * Component that displays summary statistics cards for class result
+ * @param {Object} props
+ * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
+ * @returns {JSX.Element}
+ */
+export function ClassResultSummaryStats({ gradeData }) {
+  const completedCount = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
+
+  return (
+    <>
+      <div className="col-lg-3 col-md-6 mb-3">
+        <Card className="border-0 shadow-sm h-100">
+          <Card.Body className="text-center">
+            <FontAwesomeIcon icon={faUsers} className="text-primary fs-1 mb-2" />
+            <h5 className="card-title">Total Enrollment</h5>
+            <h3 className="text-primary mb-0">{gradeData.total_enrollment}</h3>
+          </Card.Body>
+        </Card>
+      </div>
+      <div className="col-lg-3 col-md-6 mb-3">
+        <Card className="border-0 shadow-sm h-100">
+          <Card.Body className="text-center">
+            <FontAwesomeIcon icon={faBookOpen} className="text-success fs-1 mb-2" />
+            <h5 className="card-title">Completed Course</h5>
+            <h3 className="text-success mb-0">{completedCount}</h3>
+          </Card.Body>
+        </Card>
+      </div>
+      <div className="col-lg-3 col-md-6 mb-3">
+        <Card className="border-0 shadow-sm h-100">
+          <Card.Body className="text-center">
+            <i className="bi bi-arrow-left-circle text-warning fs-1 mb-2"></i>
+            <h5 className="card-title">Withdrawals</h5>
+            <h3 className="text-warning mb-0">{gradeData.Withdrawal}</h3>
+          </Card.Body>
+        </Card>
+      </div>
+      <div className="col-lg-3 col-md-6 mb-3">
+        <Card className="border-0 shadow-sm h-100">
+          <Card.Body className="text-center">
+            <i className="bi bi-clock text-info fs-1 mb-2"></i>
+            <h5 className="card-title">Incomplete</h5>
+            <h3 className="text-info mb-0">{gradeData.inc_ng}</h3>
+          </Card.Body>
+        </Card>
+      </div>
+    </>
+  );
+}

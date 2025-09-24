@@ -5,14 +5,21 @@ import Link from "next/link";
 import { faCalendar, faHashtag, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getSectionUrl } from "@lib/utils/common";
+import {
+  getSectionUrl,
+  getSortedClassResults,
+  groupClassResultsByInstructor,
+} from "@lib/utils/common";
 
 export function SearchResults({ searchResults }) {
   if (!searchResults) return null;
 
+  const sortedClassResults = getSortedClassResults(searchResults);
+  const groupedClassResults = groupClassResultsByInstructor(sortedClassResults);
+
   return (
     <div className="resultList">
-      {Object.entries(searchResults).map(([instructorName, instructorData], index) => (
+      {Object.entries(groupedClassResults).map(([instructorName, instructorData], index) => (
         <Card className="mt-3 mb-3 shadow-sm border-0" key={index}>
           <Card.Header className="bg-light border-0 py-3">
             <div className="d-flex align-items-center">
@@ -45,7 +52,7 @@ export function SearchResults({ searchResults }) {
                         Section {classItem.class_section}
                         <span className="mx-2">•</span>
                         <FontAwesomeIcon icon={faCalendar} className="me-1" />
-                        Term {classItem.term}
+                        {classItem.term}
                       </div>
                     </div>
                     <div className="text-primary">

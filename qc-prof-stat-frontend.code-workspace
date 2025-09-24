@@ -13,7 +13,7 @@
         "source.removeUnusedImports": "explicit",
       },
     },
-    "[json][jsonc]": {
+    "[json][jsonc][css][scss]": {
       "editor.tabSize": 2,
       "editor.formatOnSave": true,
       "editor.defaultFormatter": "esbenp.prettier-vscode",

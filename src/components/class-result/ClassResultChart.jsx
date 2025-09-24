@@ -1,4 +1,4 @@
-import { Col } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { Bar, Doughnut } from "react-chartjs-2";
 
 import {
@@ -14,8 +14,27 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-const GRADE_POINTS = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "Pass", "C-", "D+", "D", "F"];
-const NO_GRADE_POINTS = ["Received Grade", "Withdrawals", "Incomplete"];
+/**
+ * The below keys represent the keys present in the API response for class result JSON
+ * The values represent the human-readable labels for each grade category
+ */
+const GRADE_VALUES_TO_LABELS_MAP = {
+  A_plus: "A+",
+  A: "A",
+  A_minus: "A-",
+  B_plus: "B+",
+  B: "B",
+  B_minus: "B-",
+  C_plus: "C+",
+  C: "C",
+  P: "Pass",
+  C_minus: "C-",
+  D_plus: "D+",
+  D: "D",
+  F: "F",
+};
+
+const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
 
 /**
  * Component to render bar and doughnut charts for class grade results
@@ -24,29 +43,14 @@ const NO_GRADE_POINTS = ["Received Grade", "Withdrawals", "Incomplete"];
  * @returns {JSX.Element}
  */
 export function ClassResultChart({ gradeData }) {
-  if (!gradeData) return null;
+  const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
+  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key]);
 
-  const gradeCounts = [
-    gradeData.A_plus,
-    gradeData.A,
-    gradeData.A_minus,
-    gradeData.B_plus,
-    gradeData.B,
-    gradeData.B_minus,
-    gradeData.C_plus,
-    gradeData.C,
-    gradeData.P,
-    gradeData.C_minus,
-    gradeData.D_plus,
-    gradeData.D,
-    gradeData.F,
-  ];
-
-  const barData = createBarChartData(GRADE_POINTS, gradeCounts);
+  const barData = createBarChartData(gradeLabels, gradeCounts);
 
   const totalGradedStudents = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
 
-  const doughnutData = createDoughnutChartData(NO_GRADE_POINTS, [
+  const doughnutData = createDoughnutChartData(SUMMARY_LABELS, [
     totalGradedStudents,
     gradeData.Withdrawal,
     gradeData.inc_ng,
@@ -57,14 +61,24 @@ export function ClassResultChart({ gradeData }) {
   );
 
   return (
-    <>
-      <Col>
-        <Bar data={barData} options={barGraphOptions} height={300} />
-      </Col>
-      <Col>
-        <Doughnut data={doughnutData} options={doughnutOptions} />
-      </Col>
-    </>
+    <Card className="border-0 shadow-sm">
+      <Card.Header className="bg-white border-0 py-3">
+        <h4 className="mb-0 text-center">
+          <i className="bi bi-bar-chart-fill text-primary me-2"></i>
+          Grade Distribution Analysis
+        </h4>
+      </Card.Header>
+      <Card.Body className="p-4">
+        <Row className="align-items-center">
+          <Col>
+            <Bar data={barData} options={barGraphOptions} height={300} />
+          </Col>
+          <Col>
+            <Doughnut data={doughnutData} options={doughnutOptions} />
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
   );
 }
 
