@@ -1,6 +1,11 @@
 import { Card } from "react-bootstrap";
 
-import { faBookOpen, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightFromBracket,
+  faBookOpen,
+  faPause,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
@@ -35,7 +40,7 @@ export function ClassResultSummaryStats({ gradeData }) {
       <div className="col-lg-3 col-md-6 mb-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
-            <i className="bi bi-arrow-left-circle text-warning fs-1 mb-2"></i>
+            <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-warning fs-1 mb-2" />
             <h5 className="card-title">Withdrawals</h5>
             <h3 className="text-warning mb-0">{gradeData.Withdrawal}</h3>
           </Card.Body>
@@ -44,7 +49,8 @@ export function ClassResultSummaryStats({ gradeData }) {
       <div className="col-lg-3 col-md-6 mb-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
-            <i className="bi bi-clock text-info fs-1 mb-2"></i>
+            <FontAwesomeIcon icon={faPause} className="text-info fs-1 mb-2" />
+            {/* <FontAwesomeIcon icon={faQuestionCircle} className="text-info fs-1 mb-2" /> */}
             <h5 className="card-title">Incomplete</h5>
             <h3 className="text-info mb-0">{gradeData.inc_ng}</h3>
           </Card.Body>
