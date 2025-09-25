@@ -6,14 +6,16 @@ import Link from "next/link";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Page() {
+export default function NavbarElement() {
   return (
     <Navbar bg="light" variant="light" expand="lg" className="shadow-sm">
       <Container>
-        <Navbar.Brand href="/" className="fw-bold fs-4">
-          <span className="text-danger">QC</span>
-          <span className="text-dark"> Prof Stat</span>
-        </Navbar.Brand>
+        <Link href="/" passHref legacyBehavior>
+          <Navbar.Brand className="fw-bold fs-4">
+            <span className="text-danger">QC</span>
+            <span className="text-dark"> Prof Stat</span>
+          </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

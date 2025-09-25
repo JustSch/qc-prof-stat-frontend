@@ -28,7 +28,11 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>Class Search Results</title>
+        <title>Class Results - QC Prof Stat</title>
+        <meta
+          property="og:description"
+          content="View detailed grade distribution analysis for this Queens College class"
+        />
       </Head>
 
       {classResultFetchState.errorMessage && (

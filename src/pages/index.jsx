@@ -27,23 +27,29 @@ export default function Page() {
    * Handle search form submission and update the URL query parameter.
    *
    * @param {React.FormEvent<HTMLFormElement>} event - Form submit event (will call preventDefault())
-   * @param {string} searchValue - The search string to set as the `q` query parameter
    * @returns {void}
    */
-  function changeQuery(event, searchValue) {
+  function handleSearchSubmission(event) {
     event.preventDefault();
 
-    if (searchValue.trim() === "") return;
+    const searchValue = searchInputRef.current.value.trim();
+    if (searchValue === "") return;
 
-    const href = `/?q=${searchValue}`;
-    router.push(href, href, { shallow: true });
+    const params = new URLSearchParams({ q: searchValue });
+    const href = `/?${params.toString()}`;
+
+    router.push(href, undefined, { shallow: true });
   }
 
   return (
     <>
       <Head>
-        <meta property="og:title" content="QC Prof Stat" />
-        <meta property="og:description" content="Allows Students to see grading distributions" />
+        <title>Find Grade Distributions - QC Prof Stat</title>
+        <meta property="og:title" content="QC Prof Stat - Find Grade Distributions" />
+        <meta
+          property="og:description"
+          content="Search Queens College professors and discover grade distributions for their courses"
+        />
         <meta property="og:url" content="https://qc-prof-stat.web.app" />
       </Head>
 
@@ -73,7 +79,7 @@ export default function Page() {
               </p>
             </div>
 
-            <form onSubmit={(event) => changeQuery(event, searchInputRef.current.value)}>
+            <form onSubmit={handleSearchSubmission}>
               <InputGroup className="mb-4 shadow-sm">
                 <Form.Control
                   id="search"

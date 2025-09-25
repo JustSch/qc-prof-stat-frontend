@@ -37,7 +37,10 @@ export default function Page() {
     <>
       <Head>
         <title>Acknowledgments - QC Prof Stat</title>
-        <meta name="description" content="Meet the team behind QC Prof Stat" />
+        <meta
+          name="description"
+          content="Acknowledgments and credits for the QC Prof Stat project team and contributors"
+        />
       </Head>
 
       <div className="bg-gradient py-5 mb-4">

@@ -5,7 +5,7 @@ import "@lib/styles/globals.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const NavbarElement = dynamic(() => import("./navbar-element"), { ssr: false });
+const NavbarElement = dynamic(() => import("@lib/components/NavbarElement"), { ssr: false });
 
 export default function App({ Component, pageProps }) {
   return (
