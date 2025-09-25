@@ -23,6 +23,14 @@ export default function Page() {
     }
   }, [router.query.q]);
 
+  // reset search results when navigating to home page back from a query
+  useEffect(() => {
+    if (!router.query.q && (classSearchFetchState.data || classSearchFetchState.errorMessage)) {
+      classSearchFetchState.reset();
+      searchInputRef.current.value = "";
+    }
+  }, [router.query.q, classSearchFetchState]);
+
   /**
    * Handle search form submission and update the URL query parameter.
    *
@@ -34,6 +42,8 @@ export default function Page() {
 
     const searchValue = searchInputRef.current.value.trim();
     if (searchValue === "") return;
+
+    if (searchValue === router.query.q) return;
 
     const params = new URLSearchParams({ q: searchValue });
     const href = `/?${params.toString()}`;

@@ -5,6 +5,12 @@ export function useNextFetch(routerQuery, url) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  function reset() {
+    setData(null);
+    setIsLoading(false);
+    setErrorMessage(null);
+  }
+
   useEffect(() => {
     if (Object.keys(routerQuery).length === 0) return;
 
@@ -22,25 +28,17 @@ export function useNextFetch(routerQuery, url) {
       })
       .then((data) => {
         setData(() => data);
-
-        return { ok: true, data: data, error: null };
       })
       .catch((error) => {
         setData(() => null);
-
         setErrorMessage(() => error.message);
-        return {
-          ok: false,
-          data: null,
-          error: error.message,
-        };
       })
       .finally(() => {
         setIsLoading(() => false);
       });
   }, [routerQuery, url]);
 
-  return { data, isLoading, errorMessage };
+  return { data, isLoading, errorMessage, reset };
 }
 
 async function getErrorText(resp) {
