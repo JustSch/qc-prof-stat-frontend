@@ -65,7 +65,10 @@ export function SearchResults({ searchResults }) {
                         {classItem.total_enrollment} students
                       </div>
                       <div className="mt-1">
-                        <PercentageDetail decimal={calculatePassRate(classItem)} type="pass rate" />
+                        <PercentageDetail
+                          decimal={calculatePassRate(classItem)}
+                          type="Passing Rate"
+                        />
                       </div>
                     </div>
                     <div className="text-primary">

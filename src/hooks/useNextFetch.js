@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const TIMEOUT_MS = 10 * 1000; // 10 seconds
+
 export function useNextFetch(routerQuery, url) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +20,13 @@ export function useNextFetch(routerQuery, url) {
     setIsLoading(() => true);
     setErrorMessage(() => null);
 
-    fetch(url)
+    // abort controller for cancelling request if it exceeds timeout threshold
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => {
+      abortController.abort();
+    }, TIMEOUT_MS);
+
+    fetch(url, { signal: abortController.signal })
       .then(async (resp) => {
         if (!resp.ok) {
           throw new Error(await getErrorText(resp));
@@ -30,12 +38,23 @@ export function useNextFetch(routerQuery, url) {
         setData(() => data);
       })
       .catch((error) => {
-        setData(() => null);
-        setErrorMessage(() => error.message);
+        if (error.name === "AbortError") {
+          setErrorMessage(() => "Request timed out after 10 seconds");
+        } else {
+          setData(() => null);
+          setErrorMessage(() => error.message);
+        }
       })
       .finally(() => {
+        clearTimeout(timeoutId);
         setIsLoading(() => false);
       });
+
+    // Cleanup function to abort request if component unmounts or dependencies change
+    return () => {
+      clearTimeout(timeoutId);
+      abortController.abort();
+    };
   }, [routerQuery, url]);
 
   return { data, isLoading, errorMessage, reset };

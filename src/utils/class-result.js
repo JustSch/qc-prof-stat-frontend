@@ -175,9 +175,14 @@ export function computeSummaryStats(gradeData) {
 /**
  * Calculate pass rate as a decimal from grade data
  * @param {Object} gradeData - Grade data from API
- * @returns {number} - Class passing rate as decimal (passing grades / total enrollment)
+ * @returns {number | null} - Class passing rate as decimal (passing grades / total enrollment), or null if all grades are incomplete
  */
 export function calculatePassRate(gradeData) {
+  // If all students have incomplete grades, we can't determine a meaningful pass rate
+  if (gradeData.inc_ng >= gradeData.total_enrollment) {
+    return null;
+  }
+
   const totalPassingGrades = computeTotalPassingGrades(gradeData);
   return gradeData.total_enrollment > 0 ? totalPassingGrades / gradeData.total_enrollment : 0;
 }
