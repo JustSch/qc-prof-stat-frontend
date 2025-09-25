@@ -3,7 +3,6 @@ import { Bar, Doughnut } from "react-chartjs-2";
 
 import {
   BAR_GRAPH_OPTIONS,
-  GRADE_VALUES_TO_LABELS_MAP,
   SUMMARY_LABELS,
   createBarChartData,
   createDoughnutChartData,
@@ -27,15 +26,13 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
  * Component to render bar and doughnut charts for class grade results
  * @param {Object} props
  * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
+ * @param {Object} props.summaryStats - Computed summary statistics
  * @returns {JSX.Element}
  */
-export function ClassResultChart({ gradeData }) {
-  const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
-  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key] ?? "0");
+export function ClassResultChart({ gradeData, summaryStats }) {
+  const { gradeLabels, gradeCounts, totalGradedStudents } = summaryStats;
 
   const barData = createBarChartData(gradeLabels, gradeCounts);
-  const totalGradedStudents = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
-
   const doughnutData = createDoughnutChartData(SUMMARY_LABELS, [
     totalGradedStudents,
     gradeData.Withdrawal,

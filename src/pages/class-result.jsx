@@ -10,6 +10,7 @@ import {
   ClassResultSummaryStats,
 } from "@lib/components/class-result";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
+import { computeSummaryStats } from "@lib/utils/class-result";
 
 export default function Page() {
   const router = useRouter();
@@ -24,6 +25,8 @@ export default function Page() {
   // Since we are querying for only one specific class, it should only return an array of size 1
   // We just return first object in the array
   const classResult = classResultFetchState.data?.[0];
+
+  const summaryStats = classResult ? computeSummaryStats(classResult) : null;
 
   return (
     <>
@@ -55,7 +58,7 @@ export default function Page() {
 
       {classResultFetchState.isLoading && <ClassResultPlaceholder />}
 
-      {classResult && (
+      {classResult && summaryStats && (
         <div className="bg-light min-vh-100">
           <div className="bg-gradient bg-primary text-white py-4 mb-4">
             <Container>
@@ -65,12 +68,12 @@ export default function Page() {
 
           <Container className="py-4">
             <Row className="mb-4">
-              <ClassResultSummaryStats gradeData={classResult} />
+              <ClassResultSummaryStats gradeData={classResult} summaryStats={summaryStats} />
             </Row>
           </Container>
 
           <Container className="pb-4">
-            <ClassResultChart gradeData={classResult} />
+            <ClassResultChart gradeData={classResult} summaryStats={summaryStats} />
           </Container>
         </div>
       )}

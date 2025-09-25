@@ -8,38 +8,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { GRADE_VALUES_TO_LABELS_MAP } from "@lib/utils/class-result";
-
 /**
  * Component that displays summary statistics cards for class result
  * @param {Object} props
  * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
+ * @param {Object} props.summaryStats - Computed summary statistics
  * @returns {JSX.Element}
  */
-export function ClassResultSummaryStats({ gradeData }) {
-  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key] ?? "0");
-
-  // map gradeCounts to binary representation of pass or not pass, eg: [1, 1, 1, 1, 0, 0, 0]
-  const completedIndicators = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((gradeKey) => {
-    if (
-      gradeKey.startsWith("A") ||
-      gradeKey.startsWith("B") ||
-      (gradeKey.startsWith("C") && gradeKey !== "C_minus")
-      // || gradeKey === "P"
-    ) {
-      return 1;
-    }
-    return 0;
-  });
-
-  // sum up the actual numeric values for passing grades
-  let passingGradeCount = 0;
-  for (const [i, completedIndicator] of completedIndicators.entries()) {
-    if (completedIndicator === 0) continue;
-
-    passingGradeCount += Number.parseInt(gradeCounts[i]);
-  }
-
+export function ClassResultSummaryStats({ gradeData, summaryStats }) {
   return (
     <>
       <div className="col-lg-3 col-md-6 mb-3">
@@ -56,7 +32,7 @@ export function ClassResultSummaryStats({ gradeData }) {
           <Card.Body className="text-center">
             <FontAwesomeIcon icon={faBookOpen} className="text-success fs-1 mb-2" />
             <h5 className="card-title">Completed Course</h5>
-            <h3 className="text-success mb-0">{passingGradeCount}</h3>
+            <h3 className="text-success mb-0">{summaryStats.totalPassingGrades}</h3>
           </Card.Body>
         </Card>
       </div>

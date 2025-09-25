@@ -2,7 +2,7 @@
  * The below keys represent the keys present in the API response for class result JSON
  * The values represent the human-readable labels for each grade category
  */
-export const GRADE_VALUES_TO_LABELS_MAP = {
+const GRADE_VALUES_TO_LABELS_MAP = {
   A_plus: "A+",
   A: "A",
   A_minus: "A-",
@@ -118,5 +118,46 @@ export function createDoughnutOptions(title) {
         text: title,
       },
     },
+  };
+}
+
+/**
+ * Compute summary statistics from grade data
+ * @param {Object} gradeData - Raw grade data from API
+ * @returns {Object} - Computed statistics
+ */
+export function computeSummaryStats(gradeData) {
+  const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
+  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key] ?? "0");
+
+  // map gradeCounts to binary representation of pass or not pass, eg: [1, 1, 1, 1, 0, 0, 0]
+  const completedIndicators = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((gradeKey) => {
+    if (
+      gradeKey.startsWith("A") ||
+      gradeKey.startsWith("B") ||
+      (gradeKey.startsWith("C") && gradeKey !== "C_minus")
+      // || gradeKey === "P"
+    ) {
+      return 1;
+    }
+    return 0;
+  });
+
+  // sum up the actual numeric values for passing grades
+  let totalPassingGrades = 0;
+  for (const [i, completedIndicator] of completedIndicators.entries()) {
+    if (completedIndicator === 0) continue;
+    totalPassingGrades += Number.parseInt(gradeCounts[i]);
+  }
+
+  const totalGradedStudents = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
+  const totalFailingGrades = totalGradedStudents - totalPassingGrades;
+
+  return {
+    gradeLabels, // ["A+", "A", "A-", ..., "F"]
+    gradeCounts, // [12, 30, 25, ..., 3], gradeCounts[i] corresponds to gradeLabels[i]
+    totalPassingGrades,
+    totalFailingGrades,
+    totalGradedStudents, // number of students who received a letter grade (not W or INC)
   };
 }
