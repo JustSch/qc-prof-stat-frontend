@@ -1,65 +1,38 @@
 /**
  * Groups the results by instructor
- * @param {Array} classResults - The array of result objects
+ * @param {Array} classResults - The array of result objects (grade data objects)
  * @returns {Object} - The grouped results
  */
 export function groupClassResultsByInstructor(classResults) {
   const groupedClassResults = {};
 
-  for (const result of classResults) {
-    if (!Object.prototype.hasOwnProperty.call(groupedClassResults, result.instructor)) {
-      groupedClassResults[result.instructor] = { classes: [] };
+  for (const gradeData of classResults) {
+    if (!Object.prototype.hasOwnProperty.call(groupedClassResults, gradeData.instructor)) {
+      groupedClassResults[gradeData.instructor] = { classes: [] };
     }
 
-    groupedClassResults[result.instructor].classes.push({
-      subject: result.subject,
-      course_number: result.course_number,
-      class_section: result.class_section,
-      term: result.term,
-    });
+    // push the full grade data object directly instead of creating a custom object
+    groupedClassResults[gradeData.instructor].classes.push(gradeData);
   }
 
   return groupedClassResults;
 }
 
 /**
- * @param {Object} data - Truncated class result object: {subject: string; course_number: string; class_section: string; term: string;}
- * @param {string} instructor - The instructor's name
+ * @param {Object} gradeData - Class grade data from API
  * @returns {URL} - The section URL
  */
-export function getSectionUrl(data, instructor) {
-  const resURL = new URL(window.location.origin + "/class-result/");
+export function getSectionUrl(gradeData) {
+  const sectionUrl = new URL(window.location.origin + "/class-result/");
 
-  resURL.searchParams.append("instructor", instructor);
-  resURL.searchParams.append("term", data.term);
-  resURL.searchParams.append("subject", data.subject);
-  resURL.searchParams.append("course_number", data.course_number);
-  resURL.searchParams.append("class_section", data.class_section);
+  sectionUrl.searchParams.append("instructor", gradeData.instructor);
+  sectionUrl.searchParams.append("term", gradeData.term);
+  sectionUrl.searchParams.append("subject", gradeData.subject);
+  sectionUrl.searchParams.append("course_number", gradeData.course_number);
+  sectionUrl.searchParams.append("class_section", gradeData.class_section);
 
-  return resURL;
+  return sectionUrl;
 }
-
-// export function getInstructorURL(data) {
-//   const instrURL = new URL(window.location.origin + "/instructorResult/");
-//   instrURL.searchParams.append("instructor", data);
-
-//   return instrURL;
-// }
-
-// export function createSearchUrls(data) {
-//   const resURL = new URL(window.location.href + "class-result/");
-
-//   resURL.searchParams.append("instructor", data.instructor);
-//   resURL.searchParams.append("term", data.term);
-//   resURL.searchParams.append("subject", data.subject);
-//   resURL.searchParams.append("course_number", data.course_number);
-//   resURL.searchParams.append("class_section", data.class_section);
-
-//   const instrURL = new URL(window.location.href + "instructorResult/");
-//   instrURL.searchParams.append("instructor", data.instructor);
-
-//   return { resURL, instrURL };
-// }
 
 /**
  * @param {Array<Object>} classSearchResults - array of class result objects

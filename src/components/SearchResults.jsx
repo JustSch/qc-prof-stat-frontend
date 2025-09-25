@@ -2,9 +2,11 @@ import { Badge, Card, ListGroup } from "react-bootstrap";
 
 import Link from "next/link";
 
-import { faCalendar, faHashtag, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faHashtag, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { PercentageDetail } from "@lib/components/PercentageDetail";
+import { calculatePassRate } from "@lib/utils/class-result";
 import {
   getSectionUrl,
   getSortedClassResults,
@@ -38,14 +40,19 @@ export function SearchResults({ searchResults }) {
                 className="border-0 py-3 hover-item"
                 style={{ cursor: "pointer" }}
               >
-                <Link
-                  href={getSectionUrl(classItem, instructorName)}
-                  className="text-decoration-none"
-                >
+                <Link href={getSectionUrl(classItem)} className="text-decoration-none">
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <h6 className="mb-1 text-dark">
                         {classItem.subject} {classItem.course_number}
+                        {classItem.course_desc && (
+                          <span
+                            className="text-muted ms-2"
+                            style={{ fontWeight: "normal", fontSize: "0.9em" }}
+                          >
+                            - {classItem.course_desc}
+                          </span>
+                        )}
                       </h6>
                       <div className="text-muted small">
                         <FontAwesomeIcon icon={faHashtag} className="me-1" />
@@ -53,6 +60,12 @@ export function SearchResults({ searchResults }) {
                         <span className="mx-2">•</span>
                         <FontAwesomeIcon icon={faCalendar} className="me-1" />
                         {classItem.term}
+                        <span className="mx-2">•</span>
+                        <FontAwesomeIcon icon={faUsers} className="me-1" />
+                        {classItem.total_enrollment} students
+                      </div>
+                      <div className="mt-1">
+                        <PercentageDetail decimal={calculatePassRate(classItem)} type="pass rate" />
                       </div>
                     </div>
                     <div className="text-primary">
