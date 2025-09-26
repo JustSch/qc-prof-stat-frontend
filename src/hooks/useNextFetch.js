@@ -20,13 +20,7 @@ export function useNextFetch(routerQuery, url) {
     setIsLoading(() => true);
     setErrorMessage(() => null);
 
-    // abort controller for cancelling request if it exceeds timeout threshold
-    const abortController = new AbortController();
-    const timeoutId = setTimeout(() => {
-      abortController.abort();
-    }, TIMEOUT_MS);
-
-    fetch(url, { signal: abortController.signal })
+    fetch(url)
       .then(async (resp) => {
         if (!resp.ok) {
           throw new Error(await getErrorText(resp));
@@ -46,15 +40,8 @@ export function useNextFetch(routerQuery, url) {
         }
       })
       .finally(() => {
-        clearTimeout(timeoutId);
         setIsLoading(() => false);
       });
-
-    // Cleanup function to abort request if component unmounts or dependencies change
-    return () => {
-      clearTimeout(timeoutId);
-      abortController.abort();
-    };
   }, [routerQuery, url]);
 
   return { data, isLoading, errorMessage, reset };
