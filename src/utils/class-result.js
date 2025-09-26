@@ -178,21 +178,6 @@ export function computeSummaryStats(classResult) {
 }
 
 /**
- * Calculate pass rate as a decimal from grade data
- * @param {TClassResult} classResult - Class Result data from API
- * @returns {number | null} - Class passing rate as decimal (passing grades / total enrollment), or null if all grades are incomplete
- */
-export function calculatePassRate(classResult) {
-  // If all students have incomplete grades, we can't determine a meaningful pass rate
-  if (classResult.inc_ng >= classResult.total_enrollment) {
-    return null;
-  }
-
-  const totalPassingGrades = computeTotalPassingGrades(classResult, "C");
-  return classResult.total_enrollment > 0 ? totalPassingGrades / classResult.total_enrollment : 0;
-}
-
-/**
  * Calculate pass rate as a decimal from grade data using a configurable threshold
  * @param {TClassResult} classResult - Class Result data from API
  * @param {TGradeKey} thresholdGradeKey - The lowest grade key that counts as passing

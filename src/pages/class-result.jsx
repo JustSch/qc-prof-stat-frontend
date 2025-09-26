@@ -11,15 +11,13 @@ import {
 } from "@lib/components/class-result";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
 import { computeSummaryStats } from "@lib/utils/class-result";
+import { buildClassResultApiUrl } from "@lib/utils/url-builder";
 
 export default function Page() {
   const router = useRouter();
 
   // router.query: query params from the router (instructor, term, subject, course_number, class_section)
-  const classResultFetchState = useNextFetch(
-    router.query,
-    "/api/result/class/" + "?" + new URLSearchParams(router.query).toString()
-  );
+  const classResultFetchState = useNextFetch(router.query, buildClassResultApiUrl(router.query));
 
   // API endpoint returns an array of objects
   // Since we are querying for only one specific class, it should only return an array of size 1

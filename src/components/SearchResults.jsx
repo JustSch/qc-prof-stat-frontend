@@ -7,11 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { PercentageDetail } from "@lib/components/PercentageDetail";
 import { computePassingRate } from "@lib/utils/class-result";
-import {
-  getSectionUrl,
-  getSortedClassResults,
-  groupClassResultsByInstructor,
-} from "@lib/utils/common";
+import { getSortedClassResults, groupClassResultsByInstructor } from "@lib/utils/common";
+import { buildClassResultPageUrl } from "@lib/utils/url-builder";
 
 /**
  * @param {Object} props
@@ -45,7 +42,7 @@ export function SearchResults({ classResults, passingThreshold }) {
                 className="border-0 py-3 hover-item"
                 style={{ cursor: "pointer" }}
               >
-                <Link href={getSectionUrl(classItem)} className="text-decoration-none">
+                <Link href={buildClassResultPageUrl(classItem)} className="text-decoration-none">
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <h6 className="mb-1 text-dark">

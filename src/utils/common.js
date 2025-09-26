@@ -19,22 +19,6 @@ export function groupClassResultsByInstructor(classResults) {
 }
 
 /**
- * @param {TClassResult} classResult - Class grade data from API
- * @returns {URL} - The section URL
- */
-export function getSectionUrl(classResult) {
-  const sectionUrl = new URL(window.location.origin + "/class-result/");
-
-  sectionUrl.searchParams.append("instructor", classResult.instructor);
-  sectionUrl.searchParams.append("term", classResult.term);
-  sectionUrl.searchParams.append("subject", classResult.subject);
-  sectionUrl.searchParams.append("course_number", classResult.course_number);
-  sectionUrl.searchParams.append("class_section", classResult.class_section);
-
-  return sectionUrl;
-}
-
-/**
  * @param {TClassResult[]} classSearchResults - array of class result objects
  * @returns {TClassResult[]} - sorted array of class result objects
  */

@@ -11,11 +11,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SearchResults } from "@lib/components/SearchResults";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
 import { GRADE_VALUES_TO_LABELS_MAP } from "@lib/utils/class-result";
+import { buildInstructorApiUrl } from "@lib/utils/url-builder";
 
 export default function Page() {
   const router = useRouter();
 
-  const classSearchFetchState = useNextFetch(router.query, "/api/instructor/" + router.query.q);
+  const classSearchFetchState = useNextFetch(router.query, buildInstructorApiUrl(router.query.q));
   const searchInputRef = useRef(null);
 
   const passingGradeThresholds = ["C", "C_minus", "D"];
@@ -124,7 +125,7 @@ export default function Page() {
             </form>
 
             {/* select passing grade threshold */}
-            {router.query.q && (
+            {router.query.q && classSearchFetchState.data && (
               <div className="text-center mb-4">
                 <div className="d-inline-flex align-items-center gap-3">
                   <span className="text-muted">Minimum Passing Grade:</span>
