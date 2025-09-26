@@ -6,14 +6,14 @@ import { faCalendar, faHashtag, faUser, faUsers } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { PercentageDetail } from "@lib/components/PercentageDetail";
-import { calculatePassRate } from "@lib/utils/class-result";
+import { calculatePassRateWithThreshold } from "@lib/utils/class-result";
 import {
   getSectionUrl,
   getSortedClassResults,
   groupClassResultsByInstructor,
 } from "@lib/utils/common";
 
-export function SearchResults({ searchResults }) {
+export function SearchResults({ searchResults, passingThreshold }) {
   if (!searchResults) return null;
 
   const sortedClassResults = getSortedClassResults(searchResults);
@@ -66,7 +66,7 @@ export function SearchResults({ searchResults }) {
                       </div>
                       <div className="mt-1">
                         <PercentageDetail
-                          decimal={calculatePassRate(classItem)}
+                          decimal={calculatePassRateWithThreshold(classItem, passingThreshold)}
                           type="Passing Rate"
                         />
                       </div>

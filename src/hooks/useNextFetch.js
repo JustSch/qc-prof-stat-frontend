@@ -39,7 +39,7 @@ export function useNextFetch(routerQuery, url) {
       })
       .catch((error) => {
         if (error.name === "AbortError") {
-          setErrorMessage(() => "Request timed out after 10 seconds");
+          setErrorMessage(() => `Request timed out after ${TIMEOUT_MS / 1000} seconds`);
         } else {
           setData(() => null);
           setErrorMessage(() => error.message);
