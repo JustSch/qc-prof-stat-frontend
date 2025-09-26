@@ -18,7 +18,7 @@ export default function Page() {
   const classSearchFetchState = useNextFetch(router.query, "/api/instructor/" + router.query.q);
   const searchInputRef = useRef(null);
 
-  const passingGradeThresholds = ["C", "C_minus", "D_plus", "D"];
+  const passingGradeThresholds = ["C", "C_minus", "D"];
   const [passingThreshold, setPassingThreshold] = useState("C");
 
   useEffect(() => {
