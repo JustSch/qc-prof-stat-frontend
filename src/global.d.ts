@@ -23,13 +23,13 @@ declare global {
   }
 
   interface TClassResult extends TLetterGradeData, TNoLetterGradeData {
+    term: string;
+    class_section: string; // section number
     total_enrollment: number;
     instructor: string;
-    subject: string;
+    subject: string; // ie. CSCI
     course_number: string;
-    term: string;
-    course_desc: string;
-    class_section: string;
+    course_desc: string; // course name eg. Data Structures
   }
 
   type TGradeKey = keyof TLetterGradeData;

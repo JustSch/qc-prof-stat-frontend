@@ -24,7 +24,7 @@ export default function Page() {
   // We just return first object in the array
   const classResult = classResultFetchState.data?.[0];
 
-  const summaryStats = classResult ? computeSummaryStats(classResult) : null;
+  const summaryStats = classResult ? computeSummaryStats(classResult, "C") : null;
 
   return (
     <>

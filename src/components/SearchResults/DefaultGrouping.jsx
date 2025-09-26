@@ -11,11 +11,12 @@ import { getSortedClassResults, groupClassResultsByInstructor } from "@lib/utils
 import { buildClassResultPageUrl } from "@lib/utils/url-builder";
 
 /**
+ * Component for grouping class results by instructor only
  * @param {Object} props
  * @param {TClassResult[]} props.classResults - search results data
  * @param {TGradeKey} props.passingThreshold - passing grade threshold
  */
-export function SearchResults({ classResults, passingThreshold }) {
+export function DefaultGrouping({ classResults, passingThreshold }) {
   if (!classResults) return null;
 
   const sortedClassResults = getSortedClassResults(classResults);
@@ -25,12 +26,12 @@ export function SearchResults({ classResults, passingThreshold }) {
     <div className="resultList">
       {Object.entries(groupedClassResults).map(([instructorName, instructorClasses], idx1) => (
         <Card className="mt-3 mb-3 shadow-sm border-0" key={idx1}>
-          <Card.Header className="bg-light border-0 py-3">
+          <Card.Header className="bg-primary bg-opacity-10 border-0 py-3">
             <div className="d-flex align-items-center">
               <FontAwesomeIcon icon={faUser} className="text-primary me-2" />
-              <h5 className="mb-0">{instructorName}</h5>
-              <Badge bg="secondary" className="ms-auto">
-                {instructorClasses.length} course(s)
+              <h5 className="mb-0 text-primary">{instructorName}</h5>
+              <Badge bg="primary" className="ms-auto">
+                {instructorClasses.length} section(s)
               </Badge>
             </div>
           </Card.Header>

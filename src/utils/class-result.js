@@ -158,13 +158,14 @@ export function computeTotalPassingGrades(classResult, thresholdGradeKey) {
 /**
  * Compute summary statistics from grade data
  * @param {TClassResult} classResult - Class Result data from API
+ * @param {TGradeKey} thresholdGradeKey - The lowest grade key that counts as passing
  * @returns {TSummaryStats} - Computed statistics
  */
-export function computeSummaryStats(classResult) {
+export function computeSummaryStats(classResult, thresholdGradeKey) {
   const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
   const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => classResult[key] ?? "0");
 
-  const totalPassingGrades = computeTotalPassingGrades(classResult, "C");
+  const totalPassingGrades = computeTotalPassingGrades(classResult, thresholdGradeKey);
 
   const totalGradedStudents =
     classResult.total_enrollment - Number.parseInt(classResult.Withdrawal) - classResult.inc_ng;
