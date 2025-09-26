@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import { Button, Container, Dropdown, Form, InputGroup, Spinner } from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Spinner } from "react-bootstrap";
 
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SearchResults } from "@lib/components/SearchResults";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
-import { GRADE_VALUES_TO_LABELS_MAP } from "@lib/utils/class-result";
 import { buildInstructorApiUrl } from "@lib/utils/url-builder";
 
 export default function Page() {
@@ -18,9 +17,6 @@ export default function Page() {
 
   const classSearchFetchState = useNextFetch(router.query, buildInstructorApiUrl(router.query.q));
   const searchInputRef = useRef(null);
-
-  const passingGradeThresholds = ["C", "C_minus", "D"];
-  const [passingThreshold, setPassingThreshold] = useState("C");
 
   useEffect(() => {
     if (searchInputRef.current.value === "" && router.query.q) {
@@ -123,31 +119,6 @@ export default function Page() {
                 </Button>
               </InputGroup>
             </form>
-
-            {/* select passing grade threshold */}
-            {router.query.q && classSearchFetchState.data && (
-              <div className="text-center mb-4">
-                <div className="d-inline-flex align-items-center gap-3">
-                  <span className="text-muted">Minimum Passing Grade:</span>
-                  <Dropdown>
-                    <Dropdown.Toggle variant="outline-primary" size="sm" id="threshold-dropdown">
-                      {GRADE_VALUES_TO_LABELS_MAP[passingThreshold]} or Higher
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {passingGradeThresholds.map((gradeKey) => (
-                        <Dropdown.Item
-                          key={gradeKey}
-                          active={passingThreshold === gradeKey}
-                          onClick={() => setPassingThreshold(gradeKey)}
-                        >
-                          {GRADE_VALUES_TO_LABELS_MAP[gradeKey]} or Higher
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
@@ -161,10 +132,7 @@ export default function Page() {
                 </div>
               )}
               {classSearchFetchState.data && (
-                <SearchResults
-                  classResults={classSearchFetchState.data}
-                  passingThreshold={passingThreshold}
-                />
+                <SearchResults classResults={classSearchFetchState.data} />
               )}
             </div>
           </div>
