@@ -12,6 +12,21 @@ import { SubgroupedGrouping } from "./SubgroupedGrouping";
  */
 export function SearchResults({ classResults, passingThreshold }) {
   const [groupingOption, setGroupingOption] = useState("Default");
+  const [collapsedInstructors, setCollapsedInstructors] = useState(new Set());
+
+  function toggleInstructorCollapse(instructorName) {
+    setCollapsedInstructors((prev) => {
+      const newSet = new Set(prev);
+
+      if (newSet.has(instructorName)) {
+        newSet.delete(instructorName);
+      } else {
+        newSet.add(instructorName);
+      }
+
+      return newSet;
+    });
+  }
 
   if (classResults.length === 0) {
     return (
@@ -24,6 +39,8 @@ export function SearchResults({ classResults, passingThreshold }) {
     );
   }
 
+  const uniqueInstructors = new Set(classResults.map((result) => result.instructor));
+
   const groupingOptions = [
     { key: "Default", label: "Default" },
     { key: "Semester", label: "Semester" },
@@ -32,8 +49,15 @@ export function SearchResults({ classResults, passingThreshold }) {
 
   return (
     <div>
-      {/* dropdown for grouping options */}
-      <div className="mb-3 d-flex justify-content-end">
+      <div className="mb-3 d-flex justify-content-between align-items-center">
+        <div className="text-muted">
+          <small>
+            Found {classResults.length} result{classResults.length === 1 ? "" : "s"} from{" "}
+            {uniqueInstructors.size} instructor{uniqueInstructors.size === 1 ? "" : "s"}
+          </small>
+        </div>
+
+        {/* dropdown for grouping options */}
         <div className="d-flex align-items-center">
           <span className="me-2 text-muted">Group by:</span>
           <Dropdown as={ButtonGroup}>
@@ -56,7 +80,12 @@ export function SearchResults({ classResults, passingThreshold }) {
       </div>
 
       {groupingOption === "Default" && (
-        <DefaultGrouping classResults={classResults} passingThreshold={passingThreshold} />
+        <DefaultGrouping
+          classResults={classResults}
+          passingThreshold={passingThreshold}
+          collapsedInstructors={collapsedInstructors}
+          onToggleCollapse={toggleInstructorCollapse}
+        />
       )}
 
       {(groupingOption === "Semester" || groupingOption === "Course") && (
@@ -64,6 +93,8 @@ export function SearchResults({ classResults, passingThreshold }) {
           classResults={classResults}
           passingThreshold={passingThreshold}
           subGroupType={groupingOption}
+          collapsedInstructors={collapsedInstructors}
+          onToggleCollapse={toggleInstructorCollapse}
         />
       )}
     </div>
