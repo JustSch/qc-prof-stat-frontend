@@ -62,18 +62,18 @@ export default function Page() {
         <div className="bg-light min-vh-100">
           <div className="bg-gradient bg-primary text-white py-4 mb-4">
             <Container>
-              <ClassResultHeader gradeData={classResult} />
+              <ClassResultHeader classResult={classResult} />
             </Container>
           </div>
 
           <Container className="py-4">
             <Row className="mb-4">
-              <ClassResultSummaryStats gradeData={classResult} summaryStats={summaryStats} />
+              <ClassResultSummaryStats classResult={classResult} summaryStats={summaryStats} />
             </Row>
           </Container>
 
           <Container className="pb-4">
-            <ClassResultChart gradeData={classResult} summaryStats={summaryStats} />
+            <ClassResultChart classResult={classResult} summaryStats={summaryStats} />
           </Container>
         </div>
       )}

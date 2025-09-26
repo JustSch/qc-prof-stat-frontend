@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 
 const TIMEOUT_MS = 10 * 1000; // 10 seconds
 
+/**
+ * @param {NextRouter} routerQuery
+ * @param {string} url
+ * @returns
+ */
 export function useNextFetch(routerQuery, url) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

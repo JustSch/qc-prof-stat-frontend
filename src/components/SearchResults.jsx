@@ -6,37 +6,42 @@ import { faCalendar, faHashtag, faUser, faUsers } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { PercentageDetail } from "@lib/components/PercentageDetail";
-import { calculatePassRateWithThreshold } from "@lib/utils/class-result";
+import { computePassingRate } from "@lib/utils/class-result";
 import {
   getSectionUrl,
   getSortedClassResults,
   groupClassResultsByInstructor,
 } from "@lib/utils/common";
 
-export function SearchResults({ searchResults, passingThreshold }) {
-  if (!searchResults) return null;
+/**
+ * @param {Object} props
+ * @param {TClassResult[]} props.classResults - search results data
+ * @param {TGradeKey} props.passingThreshold - passing grade threshold
+ */
+export function SearchResults({ classResults, passingThreshold }) {
+  if (!classResults) return null;
 
-  const sortedClassResults = getSortedClassResults(searchResults);
+  const sortedClassResults = getSortedClassResults(classResults);
   const groupedClassResults = groupClassResultsByInstructor(sortedClassResults);
 
   return (
     <div className="resultList">
-      {Object.entries(groupedClassResults).map(([instructorName, instructorData], index) => (
-        <Card className="mt-3 mb-3 shadow-sm border-0" key={index}>
+      {Object.entries(groupedClassResults).map(([instructorName, instructorClasses], idx1) => (
+        <Card className="mt-3 mb-3 shadow-sm border-0" key={idx1}>
           <Card.Header className="bg-light border-0 py-3">
             <div className="d-flex align-items-center">
               <FontAwesomeIcon icon={faUser} className="text-primary me-2" />
               <h5 className="mb-0">{instructorName}</h5>
               <Badge bg="secondary" className="ms-auto">
-                {instructorData.classes.length} course(s)
+                {instructorClasses.length} course(s)
               </Badge>
             </div>
           </Card.Header>
 
           <ListGroup variant="flush">
-            {instructorData.classes.map((classItem, index1) => (
+            {instructorClasses.map((classItem, idx2) => (
               <ListGroup.Item
-                key={index1}
+                key={idx2}
                 className="border-0 py-3 hover-item"
                 style={{ cursor: "pointer" }}
               >
@@ -66,7 +71,7 @@ export function SearchResults({ searchResults, passingThreshold }) {
                       </div>
                       <div className="mt-1">
                         <PercentageDetail
-                          decimal={calculatePassRateWithThreshold(classItem, passingThreshold)}
+                          decimal={computePassingRate(classItem, passingThreshold)}
                           type="Passing Rate"
                         />
                       </div>

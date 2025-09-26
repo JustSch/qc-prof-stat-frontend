@@ -161,7 +161,7 @@ export default function Page() {
               )}
               {classSearchFetchState.data && (
                 <SearchResults
-                  searchResults={classSearchFetchState.data}
+                  classResults={classSearchFetchState.data}
                   passingThreshold={passingThreshold}
                 />
               )}
