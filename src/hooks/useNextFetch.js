@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 
+const TIMEOUT_MS = 10 * 1000; // 10 seconds
+
+/**
+ * @param {NextRouter} routerQuery
+ * @param {string} url
+ * @returns
+ */
 export function useNextFetch(routerQuery, url) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,8 +37,12 @@ export function useNextFetch(routerQuery, url) {
         setData(() => data);
       })
       .catch((error) => {
-        setData(() => null);
-        setErrorMessage(() => error.message);
+        if (error.name === "AbortError") {
+          setErrorMessage(() => `Request timed out after ${TIMEOUT_MS / 1000} seconds`);
+        } else {
+          setData(() => null);
+          setErrorMessage(() => error.message);
+        }
       })
       .finally(() => {
         setIsLoading(() => false);

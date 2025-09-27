@@ -25,22 +25,21 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 /**
  * Component to render bar and doughnut charts for class grade results
  * @param {Object} props
- * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
- * @param {Object} props.summaryStats - Computed summary statistics
- * @returns {JSX.Element}
+ * @param {TClassResult} props.classResult - Grade data object containing enrollment and grade counts
+ * @param {TSummaryStats} props.summaryStats - Computed summary statistics
  */
-export function ClassResultChart({ gradeData, summaryStats }) {
+export function ClassResultChart({ classResult, summaryStats }) {
   const { gradeLabels, gradeCounts, totalGradedStudents } = summaryStats;
 
   const barData = createBarChartData(gradeLabels, gradeCounts);
   const doughnutData = createDoughnutChartData(SUMMARY_LABELS, [
     totalGradedStudents,
-    gradeData.Withdrawal,
-    gradeData.inc_ng,
+    Number.parseInt(classResult.Withdrawal),
+    classResult.inc_ng,
   ]);
 
   const doughnutOptions = createDoughnutOptions(
-    `Total Enrollment: ${gradeData.total_enrollment} Students`
+    `Total Enrollment: ${classResult.total_enrollment} Students`
   );
 
   return (

@@ -11,22 +11,20 @@ import {
 } from "@lib/components/class-result";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
 import { computeSummaryStats } from "@lib/utils/class-result";
+import { buildClassResultApiUrl } from "@lib/utils/url-builder";
 
 export default function Page() {
   const router = useRouter();
 
   // router.query: query params from the router (instructor, term, subject, course_number, class_section)
-  const classResultFetchState = useNextFetch(
-    router.query,
-    "/api/result/class/" + "?" + new URLSearchParams(router.query).toString()
-  );
+  const classResultFetchState = useNextFetch(router.query, buildClassResultApiUrl(router.query));
 
   // API endpoint returns an array of objects
   // Since we are querying for only one specific class, it should only return an array of size 1
   // We just return first object in the array
   const classResult = classResultFetchState.data?.[0];
 
-  const summaryStats = classResult ? computeSummaryStats(classResult) : null;
+  const summaryStats = classResult ? computeSummaryStats(classResult, "C") : null;
 
   return (
     <>
@@ -62,18 +60,18 @@ export default function Page() {
         <div className="bg-light min-vh-100">
           <div className="bg-gradient bg-primary text-white py-4 mb-4">
             <Container>
-              <ClassResultHeader gradeData={classResult} />
+              <ClassResultHeader classResult={classResult} />
             </Container>
           </div>
 
           <Container className="py-4">
             <Row className="mb-4">
-              <ClassResultSummaryStats gradeData={classResult} summaryStats={summaryStats} />
+              <ClassResultSummaryStats classResult={classResult} summaryStats={summaryStats} />
             </Row>
           </Container>
 
           <Container className="pb-4">
-            <ClassResultChart gradeData={classResult} summaryStats={summaryStats} />
+            <ClassResultChart classResult={classResult} summaryStats={summaryStats} />
           </Container>
         </div>
       )}

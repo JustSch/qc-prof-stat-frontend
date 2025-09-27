@@ -3,7 +3,6 @@ import { Col, Container, Row } from "react-bootstrap";
 /**
  * Placeholder component that displays animated loading placeholders for charts
  * while grade data is being fetched
- * @returns {JSX.Element}
  */
 export function ClassResultPlaceholder() {
   return (

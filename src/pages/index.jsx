@@ -10,11 +10,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SearchResults } from "@lib/components/SearchResults";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
+import { buildInstructorApiUrl } from "@lib/utils/url-builder";
 
 export default function Page() {
   const router = useRouter();
 
-  const classSearchFetchState = useNextFetch(router.query, "/api/instructor/" + router.query.q);
+  const classSearchFetchState = useNextFetch(router.query, buildInstructorApiUrl(router.query.q));
   const searchInputRef = useRef(null);
 
   useEffect(() => {
@@ -131,7 +132,7 @@ export default function Page() {
                 </div>
               )}
               {classSearchFetchState.data && (
-                <SearchResults searchResults={classSearchFetchState.data} />
+                <SearchResults classResults={classSearchFetchState.data} />
               )}
             </div>
           </div>

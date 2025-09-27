@@ -1,42 +1,40 @@
 /**
  * Groups the results by instructor
- * @param {Array} classResults - The array of result objects (grade data objects)
- * @returns {Object} - The grouped results
+ * @param {TClassResult[]} classResults - The array of result objects (grade data objects)
+ * @returns {Record<string, {classes: TClassResult[], uniqueCourses: string[]}>} - The grouped results with unique courses
  */
 export function groupClassResultsByInstructor(classResults) {
   const groupedClassResults = {};
 
   for (const gradeData of classResults) {
     if (!Object.prototype.hasOwnProperty.call(groupedClassResults, gradeData.instructor)) {
-      groupedClassResults[gradeData.instructor] = { classes: [] };
+      groupedClassResults[gradeData.instructor] = {
+        classes: [],
+        uniqueCourses: [],
+      };
     }
 
-    // push the full grade data object directly instead of creating a custom object
+    // push the full grade data object directly
     groupedClassResults[gradeData.instructor].classes.push(gradeData);
+  }
+
+  // add unique courses for each instructor
+  for (const classResults of Object.values(groupedClassResults)) {
+    const coursesSet = new Set();
+
+    for (const classItem of classResults.classes) {
+      const course = `${classItem.subject} ${classItem.course_number}`;
+      coursesSet.add(course);
+    }
+    classResults.uniqueCourses = [...coursesSet].toSorted();
   }
 
   return groupedClassResults;
 }
 
 /**
- * @param {Object} gradeData - Class grade data from API
- * @returns {URL} - The section URL
- */
-export function getSectionUrl(gradeData) {
-  const sectionUrl = new URL(window.location.origin + "/class-result/");
-
-  sectionUrl.searchParams.append("instructor", gradeData.instructor);
-  sectionUrl.searchParams.append("term", gradeData.term);
-  sectionUrl.searchParams.append("subject", gradeData.subject);
-  sectionUrl.searchParams.append("course_number", gradeData.course_number);
-  sectionUrl.searchParams.append("class_section", gradeData.class_section);
-
-  return sectionUrl;
-}
-
-/**
- * @param {Array<Object>} classSearchResults - array of class result objects
- * @returns {Array<Object>} - sorted array of class result objects
+ * @param {TClassResult[]} classSearchResults - array of class result objects
+ * @returns {TClassResult[]} - sorted array of class result objects
  */
 export function getSortedClassResults(classSearchResults) {
   return classSearchResults.toSorted((a, b) => {
@@ -48,11 +46,13 @@ export function getSortedClassResults(classSearchResults) {
 }
 
 /**
- * @param {Object} courseSection - class result object
+ * @param {TClassResult} classResult - class result object
  * @returns {string} - sort key string
  */
-function getSortKeyString(courseSection) {
-  const [termName, termYear] = courseSection.term.split(" ");
+function getSortKeyString(classResult) {
+  const [termName, termYear] = classResult.term.split(" ");
+
+  /** @type {Record<string, number>} */
   const termNamePriorityMap = {
     Winter: 1,
     Spring: 2,
@@ -62,5 +62,5 @@ function getSortKeyString(courseSection) {
 
   const termPriority = termNamePriorityMap[termName] ?? 0;
 
-  return `${termYear} ${termPriority}${termName} ${courseSection.subject} ${courseSection.course_number} ${courseSection.class_section}`;
+  return `${termYear} ${termPriority}${termName} ${classResult.subject} ${classResult.course_number} ${classResult.class_section}`;
 }

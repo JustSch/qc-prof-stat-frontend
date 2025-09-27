@@ -6,10 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /**
  * Component that displays the header for class result section
  * @param {Object} props
- * @param {Object} props.gradeData - Grade data object containing enrollment and grade counts
- * @returns {JSX.Element}
+ * @param {TClassResult} props.classResult - Grade data object containing enrollment and grade counts
  */
-export function ClassResultHeader({ gradeData }) {
+export function ClassResultHeader({ classResult }) {
   return (
     <div className="text-center">
       <h1 className="display-6 fw-bold mb-3">
@@ -26,25 +25,25 @@ export function ClassResultHeader({ gradeData }) {
                     <FontAwesomeIcon icon={faChalkboardTeacher} className="me-2" />
                     <span className="fw-semibold">Instructor</span>
                   </div>
-                  <div className="fs-5">{gradeData.instructor}</div>
+                  <div className="fs-5">{classResult.instructor}</div>
                 </div>
                 <div className="col-md-6 mb-2">
                   <div className="d-flex align-items-center justify-content-center mb-1">
                     <FontAwesomeIcon icon={faCalendarAlt} className="me-2" />
                     <span className="fw-semibold">Term</span>
                   </div>
-                  <div className="fs-5">{gradeData.term}</div>
+                  <div className="fs-5">{classResult.term}</div>
                 </div>
               </div>
               <hr className="text-white-50 my-3" />
               <div className="text-center">
                 <h4 className="mb-2">
-                  {gradeData.subject} {gradeData.course_number}
+                  {classResult.subject} {classResult.course_number}
                   <Badge bg="warning" text="dark" className="ms-2">
-                    Section {gradeData.class_section}
+                    Section {classResult.class_section}
                   </Badge>
                 </h4>
-                <p className="mb-0 text-white-75">{gradeData.course_desc}</p>
+                <p className="mb-0 text-white-75">{classResult.course_desc}</p>
               </div>
             </Card.Body>
           </Card>

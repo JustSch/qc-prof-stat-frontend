@@ -1,7 +1,9 @@
 /**
+ * Note: It is important that these letter grades are ordered in highest to lowest
  * The below keys represent the keys present in the API response for class result JSON
  * The values represent the human-readable labels for each grade category
  */
+/** @type {TLetterGradeData} */
 export const GRADE_VALUES_TO_LABELS_MAP = {
   A_plus: "A+",
   A: "A",
@@ -20,12 +22,20 @@ export const GRADE_VALUES_TO_LABELS_MAP = {
 
 export const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
 
+const GRADE_KEYS = Object.keys(GRADE_VALUES_TO_LABELS_MAP);
+// lookup map of grade keys to their index positions
+const GRADE_KEY_TO_INDEX_MAP = {};
+for (const [index, gradeKey] of GRADE_KEYS.entries()) {
+  GRADE_KEY_TO_INDEX_MAP[gradeKey] = index;
+}
+
+/** @type {ChartOptions<'bar'>} */
 export const BAR_GRAPH_OPTIONS = {
   responsive: true, // chart adapts to container size changes
   maintainAspectRatio: false, // allows chart to use available height
   plugins: {
     legend: {
-      onClick: null, // disables legend click interactions
+      onClick: undefined, // disables legend click interactions
     },
   },
   scales: {
@@ -36,7 +46,7 @@ export const BAR_GRAPH_OPTIONS = {
         font: {
           size: 11,
         },
-        maxTicksLimit: false, // removes limit on number of ticks shown
+        maxTicksLimit: 0, // removes limit on number of ticks shown
         autoSkip: false, // prevents automatic skipping of labels when viewport is narrow
       },
     },
@@ -95,7 +105,7 @@ export function createDoughnutChartData(labels, dataValues) {
 /**
  * Generate options object for the Doughnut chart.
  * @param {string} title - The title text to display above the chart
- * @returns {Object} - Chart.js doughnut options object
+ * @returns {ChartOptions<'doughnut'>} - Chart.js doughnut options object
  */
 export function createDoughnutOptions(title) {
   return {
@@ -122,30 +132,24 @@ export function createDoughnutOptions(title) {
 }
 
 /**
- * Compute just the total passing grades from grade data
- * @param {Object} gradeData - Class grade data from API
- * @returns {number} - Total number of passing grades
+ * Compute total passing grades based on threshold passing grade
+ * @param {TClassResult} classResult - Class Result data from API
+ * @param {TGradeKey} thresholdGradeKey - The lowest grade key that counts as passing (eg, "C", "C_minus", "D_plus", "D")
+ * @returns {number} - Total number of passing grades at or above the threshold
  */
-export function computeTotalPassingGrades(gradeData) {
-  // map grade keys to binary representation of pass or not pass
-  const completedIndicators = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((gradeKey) => {
-    if (
-      gradeKey.startsWith("A") ||
-      gradeKey.startsWith("B") ||
-      (gradeKey.startsWith("C") && gradeKey !== "C_minus")
-      // || gradeKey === "P"
-    ) {
-      return 1;
-    }
-    return 0;
-  });
+export function computeTotalPassingGrades(classResult, thresholdGradeKey) {
+  const thresholdIndex = GRADE_KEY_TO_INDEX_MAP[thresholdGradeKey];
+  if (thresholdIndex === undefined) {
+    throw new Error(`Invalid threshold grade key: ${thresholdGradeKey}`);
+  }
 
-  // sum up the actual numeric values for passing grades
+  // tally up th grades at or above the threshold (lower index = higher grade)
   let totalPassingGrades = 0;
-  for (const [i, completedIndicator] of completedIndicators.entries()) {
-    if (completedIndicator === 0) continue;
-    const gradeKey = Object.keys(GRADE_VALUES_TO_LABELS_MAP)[i];
-    totalPassingGrades += Number.parseInt(gradeData[gradeKey] ?? "0");
+  for (let i = 0; i <= thresholdIndex; i++) {
+    const gradeKey = GRADE_KEYS[i];
+    if (gradeKey in classResult) {
+      totalPassingGrades += Number.parseInt(classResult[gradeKey] ?? "0");
+    }
   }
 
   return totalPassingGrades;
@@ -153,16 +157,18 @@ export function computeTotalPassingGrades(gradeData) {
 
 /**
  * Compute summary statistics from grade data
- * @param {Object} gradeData - Class grade data from API
- * @returns {Object} - Computed statistics
+ * @param {TClassResult} classResult - Class Result data from API
+ * @param {TGradeKey} thresholdGradeKey - The lowest grade key that counts as passing
+ * @returns {TSummaryStats} - Computed statistics
  */
-export function computeSummaryStats(gradeData) {
+export function computeSummaryStats(classResult, thresholdGradeKey) {
   const gradeLabels = Object.values(GRADE_VALUES_TO_LABELS_MAP);
-  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => gradeData[key] ?? "0");
+  const gradeCounts = Object.keys(GRADE_VALUES_TO_LABELS_MAP).map((key) => classResult[key] ?? "0");
 
-  const totalPassingGrades = computeTotalPassingGrades(gradeData);
+  const totalPassingGrades = computeTotalPassingGrades(classResult, thresholdGradeKey);
 
-  const totalGradedStudents = gradeData.total_enrollment - gradeData.Withdrawal - gradeData.inc_ng;
+  const totalGradedStudents =
+    classResult.total_enrollment - Number.parseInt(classResult.Withdrawal) - classResult.inc_ng;
 
   return {
     gradeLabels, // ["A+", "A", "A-", ..., "F"]
@@ -173,11 +179,17 @@ export function computeSummaryStats(gradeData) {
 }
 
 /**
- * Calculate pass rate as a decimal from grade data
- * @param {Object} gradeData - Grade data from API
- * @returns {number} - Class passing rate as decimal (passing grades / total enrollment)
+ * Calculate pass rate as a decimal from grade data using a configurable threshold
+ * @param {TClassResult} classResult - Class Result data from API
+ * @param {TGradeKey} thresholdGradeKey - The lowest grade key that counts as passing
+ * @returns {number | null} - Class passing rate as decimal (passing grades / total enrollment), or null if all grades are incomplete
  */
-export function calculatePassRate(gradeData) {
-  const totalPassingGrades = computeTotalPassingGrades(gradeData);
-  return gradeData.total_enrollment > 0 ? totalPassingGrades / gradeData.total_enrollment : 0;
+export function computePassingRate(classResult, thresholdGradeKey) {
+  // If all students have incomplete grades, we can't determine a meaningful pass rate
+  if (classResult.inc_ng >= classResult.total_enrollment) {
+    return null;
+  }
+
+  const totalPassingGrades = computeTotalPassingGrades(classResult, thresholdGradeKey);
+  return classResult.total_enrollment > 0 ? totalPassingGrades / classResult.total_enrollment : 0;
 }
