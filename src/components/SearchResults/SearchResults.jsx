@@ -27,6 +27,13 @@ export function SearchResults({ classResults }) {
   const sortedClassResults = getSortedClassResults(classResults);
   const defaultGroupedClassResults = groupClassResultsByInstructor(sortedClassResults);
 
+  const passingGradeThresholds = ["C", "C_minus", "D"];
+  const groupingOptions = [
+    { key: "Default", label: "Default" },
+    { key: "Semester", label: "Semester" },
+    { key: "Course", label: "Course" },
+  ];
+
   function toggleInstructorCollapse(instructorName) {
     setCollapsedInstructors((prev) => {
       const newSet = new Set(prev);
@@ -66,13 +73,6 @@ export function SearchResults({ classResults }) {
       </div>
     );
   }
-
-  const passingGradeThresholds = ["C", "C_minus", "D"];
-  const groupingOptions = [
-    { key: "Default", label: "Default" },
-    { key: "Semester", label: "Semester" },
-    { key: "Course", label: "Course" },
-  ];
 
   return (
     <div>
@@ -137,22 +137,34 @@ export function SearchResults({ classResults }) {
       </div>
 
       {groupingOption === "Default" && (
-        <DefaultGrouping
-          defaultGroupedClassResults={defaultGroupedClassResults}
-          passingThreshold={passingThreshold}
-          collapsedInstructors={collapsedInstructors}
-          onToggleCollapse={toggleInstructorCollapse}
-        />
+        <div className="resultList">
+          {Object.entries(defaultGroupedClassResults).map(([instructorName, { classes }]) => (
+            <DefaultGrouping
+              key={instructorName}
+              instructorName={instructorName}
+              instructorClasses={classes}
+              passingThreshold={passingThreshold}
+              isCollapsed={collapsedInstructors.has(instructorName)}
+              onToggleCollapse={toggleInstructorCollapse}
+            />
+          ))}
+        </div>
       )}
 
       {(groupingOption === "Semester" || groupingOption === "Course") && (
-        <SubgroupedGrouping
-          defaultGroupedClassResults={defaultGroupedClassResults}
-          passingThreshold={passingThreshold}
-          subGroupType={groupingOption}
-          collapsedInstructors={collapsedInstructors}
-          onToggleCollapse={toggleInstructorCollapse}
-        />
+        <div className="resultList">
+          {Object.entries(defaultGroupedClassResults).map(([instructorName, { classes }]) => (
+            <SubgroupedGrouping
+              key={instructorName}
+              instructorName={instructorName}
+              instructorClasses={classes}
+              passingThreshold={passingThreshold}
+              subGroupType={groupingOption}
+              isCollapsed={collapsedInstructors.has(instructorName)}
+              onToggleCollapse={toggleInstructorCollapse}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
