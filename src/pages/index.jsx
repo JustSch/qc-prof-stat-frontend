@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Button, Container, Form, InputGroup, Spinner } from "react-bootstrap";
+import { Button, Card, Container, Form, InputGroup, ListGroup, Spinner } from "react-bootstrap";
 
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -16,7 +16,25 @@ export default function Page() {
   const router = useRouter();
 
   const classSearchFetchState = useNextFetch(router.query, buildInstructorApiUrl(router.query.q));
+  const [searchHistory, setSearchHistory] = useState([]);
+
   const searchInputRef = useRef(null);
+  const searchFormRef = useRef(null);
+
+  const SEARCH_HISTORY_KEY = "qc-prof-stat-search-history";
+  const MAX_SEARCH_HISTORY = 10;
+
+  // load search history from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem(SEARCH_HISTORY_KEY);
+      if (savedHistory) {
+        setSearchHistory(JSON.parse(savedHistory));
+      }
+    } catch (error) {
+      console.warn("Failed to load search history:", error);
+    }
+  }, []);
 
   useEffect(() => {
     if (searchInputRef.current.value === "" && router.query.q) {
@@ -32,9 +50,35 @@ export default function Page() {
     }
   }, [router.query.q, classSearchFetchState]);
 
+  // save search history to localStorage
+  function saveSearchHistory(history) {
+    try {
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+      setSearchHistory(history);
+    } catch (error) {
+      console.warn("Failed to save search history:", error);
+    }
+  }
+
+  // add search query to history
+  function addToSearchHistory(query) {
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
+
+    const newHistory = [trimmedQuery];
+
+    // add other items provided they don't match the current query
+    for (const item of searchHistory) {
+      if (item !== trimmedQuery && newHistory.length < MAX_SEARCH_HISTORY) {
+        newHistory.push(item);
+      }
+    }
+
+    saveSearchHistory(newHistory);
+  }
+
   /**
    * Handle search form submission and update the URL query parameter.
-   *
    * @param {React.FormEvent<HTMLFormElement>} event - Form submit event (will call preventDefault())
    * @returns {void}
    */
@@ -46,10 +90,21 @@ export default function Page() {
 
     if (searchValue === router.query.q) return;
 
+    addToSearchHistory(searchValue);
+
     const params = new URLSearchParams({ q: searchValue });
     const href = `/?${params.toString()}`;
 
     router.push(href, undefined, { shallow: true });
+  }
+
+  /**
+   * @param {string} query - The search query to execute
+   */
+  function handleHistoryItemClick(query) {
+    searchInputRef.current.value = query;
+
+    searchFormRef.current.requestSubmit();
   }
 
   return (
@@ -90,7 +145,7 @@ export default function Page() {
               </p>
             </div>
 
-            <form onSubmit={handleSearchSubmission}>
+            <form onSubmit={handleSearchSubmission} ref={searchFormRef}>
               <InputGroup className="mb-4 shadow-sm">
                 <Form.Control
                   id="search"
@@ -123,14 +178,40 @@ export default function Page() {
         </div>
 
         {/* search results */}
-        <div className="row justify-content-center">
-          <div className="col-lg-10 col-xl-8">
-            <div id="searchbox">
+        <div className="row justify-content-center mb-4">
+          <div className="col-lg-8 col-xl-6">
+            <div>
               {classSearchFetchState.errorMessage && (
                 <div className="alert alert-danger shadow-sm" role="alert">
                   <strong>Oops!</strong> {classSearchFetchState.errorMessage}
                 </div>
               )}
+
+              {/* search history - show when no active search or if there's a search error */}
+              {(!router.query.q || !!classSearchFetchState.errorMessage) && (
+                <div>
+                  <Card className="shadow-sm">
+                    <Card.Header className="bg-light">
+                      <h5 className="mb-0 text-muted">Recent Searches</h5>
+                    </Card.Header>
+                    <ListGroup variant="flush">
+                      {searchHistory.map((query, index) => (
+                        <ListGroup.Item
+                          key={index}
+                          action
+                          onClick={() => handleHistoryItemClick(query)}
+                          className="d-flex align-items-center py-3"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-muted me-3" />
+                          <span>{query}</span>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </div>
+              )}
+
               {classSearchFetchState.data && (
                 <SearchResults classResults={classSearchFetchState.data} />
               )}
