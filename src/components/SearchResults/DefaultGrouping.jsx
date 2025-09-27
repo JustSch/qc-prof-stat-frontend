@@ -49,14 +49,7 @@ export function DefaultGrouping({
             className="text-primary me-2"
           />
           <FontAwesomeIcon icon={faUser} className="text-primary me-2" />
-          <div className="flex-grow-1">
-            <h5 className="mb-0 text-primary">{instructorName}</h5>
-            {uniqueCourses && uniqueCourses.length > 0 && (
-              <div className="text-muted small mt-1">
-                <strong>Courses:</strong> {uniqueCourses.join(", ")}
-              </div>
-            )}
-          </div>
+          <h5 className="mb-0 text-primary">{instructorName}</h5>
           <Badge bg="primary" className="ms-auto">
             {instructorClasses.length} section(s)
           </Badge>
@@ -65,6 +58,13 @@ export function DefaultGrouping({
 
       <Collapse in={!isCollapsed}>
         <div>
+          {uniqueCourses && uniqueCourses.length > 0 && (
+            <div className="px-3 py-2 bg-light bg-opacity-25 border-bottom">
+              <div className="text-muted small">
+                <strong>Courses:</strong> {uniqueCourses.join(", ")}
+              </div>
+            </div>
+          )}
           <ListGroup variant="flush">
             {instructorClasses.map((classItem, idx2) => (
               <ListGroup.Item
