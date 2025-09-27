@@ -6,6 +6,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { GRADE_VALUES_TO_LABELS_MAP } from "@lib/utils/class-result";
+import { getSortedClassResults, groupClassResultsByInstructor } from "@lib/utils/common";
 
 import { DefaultGrouping } from "./DefaultGrouping";
 import { SubgroupedGrouping } from "./SubgroupedGrouping";
@@ -18,6 +19,13 @@ export function SearchResults({ classResults }) {
   const [groupingOption, setGroupingOption] = useState("Default");
   const [collapsedInstructors, setCollapsedInstructors] = useState(new Set());
   const [passingThreshold, setPassingThreshold] = useState("C");
+
+  const uniqueInstructors = new Set(classResults.map((result) => result.instructor));
+  const allInstructors = [...uniqueInstructors];
+  const isAllCollapsed = allInstructors.every((instructor) => collapsedInstructors.has(instructor));
+
+  const sortedClassResults = getSortedClassResults(classResults);
+  const defaultGroupedClassResults = groupClassResultsByInstructor(sortedClassResults);
 
   function toggleInstructorCollapse(instructorName) {
     setCollapsedInstructors((prev) => {
@@ -58,10 +66,6 @@ export function SearchResults({ classResults }) {
       </div>
     );
   }
-
-  const uniqueInstructors = new Set(classResults.map((result) => result.instructor));
-  const allInstructors = [...uniqueInstructors];
-  const isAllCollapsed = allInstructors.every((instructor) => collapsedInstructors.has(instructor));
 
   const passingGradeThresholds = ["C", "C_minus", "D"];
   const groupingOptions = [
@@ -134,7 +138,7 @@ export function SearchResults({ classResults }) {
 
       {groupingOption === "Default" && (
         <DefaultGrouping
-          classResults={classResults}
+          defaultGroupedClassResults={defaultGroupedClassResults}
           passingThreshold={passingThreshold}
           collapsedInstructors={collapsedInstructors}
           onToggleCollapse={toggleInstructorCollapse}
@@ -143,7 +147,7 @@ export function SearchResults({ classResults }) {
 
       {(groupingOption === "Semester" || groupingOption === "Course") && (
         <SubgroupedGrouping
-          classResults={classResults}
+          defaultGroupedClassResults={defaultGroupedClassResults}
           passingThreshold={passingThreshold}
           subGroupType={groupingOption}
           collapsedInstructors={collapsedInstructors}
