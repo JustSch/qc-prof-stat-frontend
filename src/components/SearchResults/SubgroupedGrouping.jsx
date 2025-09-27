@@ -64,6 +64,7 @@ function groupClassesByCourse(classes) {
  * @param {Object} props
  * @param {string} props.instructorName - instructor name
  * @param {TClassResult[]} props.instructorClasses - class results for the instructor
+ * @param {string[]} props.uniqueCourses - unique courses taught by the instructor
  * @param {TGradeKey} props.passingThreshold - passing grade threshold
  * @param {"Semester" | "Course"} props.subGroupType - type of subgrouping
  * @param {boolean} props.isCollapsed - whether instructor section is collapsed
@@ -72,6 +73,7 @@ function groupClassesByCourse(classes) {
 export function SubgroupedGrouping({
   instructorName,
   instructorClasses,
+  uniqueCourses,
   passingThreshold,
   subGroupType,
   isCollapsed,
@@ -104,7 +106,14 @@ export function SubgroupedGrouping({
             className="text-primary me-2"
           />
           <FontAwesomeIcon icon={faUser} className="text-primary me-2" />
-          <h5 className="mb-0 text-primary">{instructorName}</h5>
+          <div className="flex-grow-1">
+            <h5 className="mb-0 text-primary">{instructorName}</h5>
+            {uniqueCourses && uniqueCourses.length > 0 && (
+              <div className="text-muted small mt-1">
+                <strong>Courses:</strong> {uniqueCourses.join(", ")}
+              </div>
+            )}
+          </div>
           <Badge bg="primary" className="ms-auto">
             {instructorClasses.length} section(s)
           </Badge>

@@ -21,6 +21,7 @@ import { buildClassResultPageUrl } from "@lib/utils/url-builder";
  * @param {Object} props
  * @param {string} props.instructorName - instructor name
  * @param {TClassResult[]} props.instructorClasses - class results for the instructor
+ * @param {string[]} props.uniqueCourses - unique courses taught by the instructor
  * @param {TGradeKey} props.passingThreshold - passing grade threshold
  * @param {boolean} props.isCollapsed - whether instructor section is collapsed
  * @param {function(string): void} props.onToggleCollapse - function to toggle instructor collapse
@@ -28,6 +29,7 @@ import { buildClassResultPageUrl } from "@lib/utils/url-builder";
 export function DefaultGrouping({
   instructorName,
   instructorClasses,
+  uniqueCourses,
   passingThreshold,
   isCollapsed,
   onToggleCollapse,
@@ -47,7 +49,14 @@ export function DefaultGrouping({
             className="text-primary me-2"
           />
           <FontAwesomeIcon icon={faUser} className="text-primary me-2" />
-          <h5 className="mb-0 text-primary">{instructorName}</h5>
+          <div className="flex-grow-1">
+            <h5 className="mb-0 text-primary">{instructorName}</h5>
+            {uniqueCourses && uniqueCourses.length > 0 && (
+              <div className="text-muted small mt-1">
+                <strong>Courses:</strong> {uniqueCourses.join(", ")}
+              </div>
+            )}
+          </div>
           <Badge bg="primary" className="ms-auto">
             {instructorClasses.length} section(s)
           </Badge>

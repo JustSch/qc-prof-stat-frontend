@@ -138,32 +138,38 @@ export function SearchResults({ classResults }) {
 
       {groupingOption === "Default" && (
         <div className="resultList">
-          {Object.entries(defaultGroupedClassResults).map(([instructorName, { classes }]) => (
-            <DefaultGrouping
-              key={instructorName}
-              instructorName={instructorName}
-              instructorClasses={classes}
-              passingThreshold={passingThreshold}
-              isCollapsed={collapsedInstructors.has(instructorName)}
-              onToggleCollapse={toggleInstructorCollapse}
-            />
-          ))}
+          {Object.entries(defaultGroupedClassResults).map(
+            ([instructorName, { classes, uniqueCourses }]) => (
+              <DefaultGrouping
+                key={instructorName}
+                instructorName={instructorName}
+                instructorClasses={classes}
+                uniqueCourses={uniqueCourses}
+                passingThreshold={passingThreshold}
+                isCollapsed={collapsedInstructors.has(instructorName)}
+                onToggleCollapse={toggleInstructorCollapse}
+              />
+            )
+          )}
         </div>
       )}
 
       {(groupingOption === "Semester" || groupingOption === "Course") && (
         <div className="resultList">
-          {Object.entries(defaultGroupedClassResults).map(([instructorName, { classes }]) => (
-            <SubgroupedGrouping
-              key={instructorName}
-              instructorName={instructorName}
-              instructorClasses={classes}
-              passingThreshold={passingThreshold}
-              subGroupType={groupingOption}
-              isCollapsed={collapsedInstructors.has(instructorName)}
-              onToggleCollapse={toggleInstructorCollapse}
-            />
-          ))}
+          {Object.entries(defaultGroupedClassResults).map(
+            ([instructorName, { classes, uniqueCourses }]) => (
+              <SubgroupedGrouping
+                key={instructorName}
+                instructorName={instructorName}
+                instructorClasses={classes}
+                uniqueCourses={uniqueCourses}
+                passingThreshold={passingThreshold}
+                subGroupType={groupingOption}
+                isCollapsed={collapsedInstructors.has(instructorName)}
+                onToggleCollapse={toggleInstructorCollapse}
+              />
+            )
+          )}
         </div>
       )}
     </div>

@@ -1,18 +1,32 @@
 /**
  * Groups the results by instructor
  * @param {TClassResult[]} classResults - The array of result objects (grade data objects)
- * @returns {Record<string, {classes: TClassResult[]}>} - The grouped results
+ * @returns {Record<string, {classes: TClassResult[], uniqueCourses: string[]}>} - The grouped results with unique courses
  */
 export function groupClassResultsByInstructor(classResults) {
   const groupedClassResults = {};
 
   for (const gradeData of classResults) {
     if (!Object.prototype.hasOwnProperty.call(groupedClassResults, gradeData.instructor)) {
-      groupedClassResults[gradeData.instructor] = { classes: [] };
+      groupedClassResults[gradeData.instructor] = {
+        classes: [],
+        uniqueCourses: [],
+      };
     }
 
     // push the full grade data object directly
     groupedClassResults[gradeData.instructor].classes.push(gradeData);
+  }
+
+  // add unique courses for each instructor
+  for (const classResults of Object.values(groupedClassResults)) {
+    const coursesSet = new Set();
+
+    for (const classItem of classResults.classes) {
+      const course = `${classItem.subject} ${classItem.course_number}`;
+      coursesSet.add(course);
+    }
+    classResults.uniqueCourses = [...coursesSet].toSorted();
   }
 
   return groupedClassResults;
