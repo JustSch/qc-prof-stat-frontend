@@ -188,7 +188,8 @@ export default function Page() {
               )}
 
               {/* search history - show when no active search or if there's a search error */}
-              {(!router.query.q || !!classSearchFetchState.errorMessage) && (
+              {searchHistory.length > 0 &&
+                (!router.query.q || !!classSearchFetchState.errorMessage) && (
                 <div>
                   <Card className="shadow-sm">
                     <Card.Header className="bg-light">
