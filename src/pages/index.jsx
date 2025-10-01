@@ -12,6 +12,8 @@ import { SearchResults } from "@lib/components/SearchResults";
 import { useNextFetch } from "@lib/hooks/useNextFetch";
 import { buildInstructorApiUrl } from "@lib/utils/url-builder";
 
+const SEARCH_HISTORY_KEY = "qc-prof-stat-search-history";
+
 export default function Page() {
   const router = useRouter();
 
@@ -21,11 +23,12 @@ export default function Page() {
   const searchInputRef = useRef(null);
   const searchFormRef = useRef(null);
 
-  const SEARCH_HISTORY_KEY = "qc-prof-stat-search-history";
   const MAX_SEARCH_HISTORY = 10;
 
-  // load search history from localStorage on mount
   useEffect(() => {
+    searchInputRef.current.focus();
+
+    // load search history from localStorage on mount
     try {
       const savedHistory = localStorage.getItem(SEARCH_HISTORY_KEY);
       if (savedHistory) {
@@ -89,6 +92,9 @@ export default function Page() {
     if (searchValue === "") return;
 
     if (searchValue === router.query.q) return;
+
+    // on search, we want to dismiss the keyboard on mobile
+    searchInputRef.current.blur();
 
     addToSearchHistory(searchValue);
 
@@ -190,28 +196,28 @@ export default function Page() {
               {/* search history - show when no active search or if there's a search error */}
               {searchHistory.length > 0 &&
                 (!router.query.q || !!classSearchFetchState.errorMessage) && (
-                <div>
-                  <Card className="shadow-sm">
-                    <Card.Header className="bg-light">
-                      <h5 className="mb-0 text-muted">Recent Searches</h5>
-                    </Card.Header>
-                    <ListGroup variant="flush">
-                      {searchHistory.map((query, index) => (
-                        <ListGroup.Item
-                          key={index}
-                          action
-                          onClick={() => handleHistoryItemClick(query)}
-                          className="d-flex align-items-center py-3"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-muted me-3" />
-                          <span>{query}</span>
-                        </ListGroup.Item>
-                      ))}
-                    </ListGroup>
-                  </Card>
-                </div>
-              )}
+                  <div>
+                    <Card className="shadow-sm">
+                      <Card.Header className="bg-light">
+                        <h5 className="mb-0 text-muted">Recent Searches</h5>
+                      </Card.Header>
+                      <ListGroup variant="flush">
+                        {searchHistory.map((query, index) => (
+                          <ListGroup.Item
+                            key={index}
+                            action
+                            onClick={() => handleHistoryItemClick(query)}
+                            className="d-flex align-items-center py-3"
+                            style={{ cursor: "pointer" }}
+                          >
+                            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-muted me-3" />
+                            <span>{query}</span>
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    </Card>
+                  </div>
+                )}
 
               {classSearchFetchState.data && (
                 <SearchResults classResults={classSearchFetchState.data} />
