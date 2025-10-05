@@ -198,7 +198,7 @@ export default function Page() {
                 (!router.query.q || !!classSearchFetchState.errorMessage) && (
                   <div>
                     <Card className="shadow-sm">
-                      <Card.Header className="bg-light">
+                      <Card.Header>
                         <h5 className="mb-0 text-muted">Recent Searches</h5>
                       </Card.Header>
                       <ListGroup variant="flush">

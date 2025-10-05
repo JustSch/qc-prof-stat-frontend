@@ -84,8 +84,8 @@ export function SearchResults({ classResults }) {
         </div>
 
         {/* minimum passing grade dropdown */}
-        <div className="mb-3">
-          <div className="d-flex align-items-center gap-3">
+        <div className="mb-3 ">
+          <div className="d-flex align-items-center gap-3 ">
             <span className="text-muted">Minimum Passing Grade:</span>
             <Dropdown>
               <Dropdown.Toggle variant="outline-primary" size="sm" id="threshold-dropdown">
