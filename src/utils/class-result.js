@@ -25,6 +25,7 @@ export const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
 const GRADE_KEYS = Object.keys(GRADE_VALUES_TO_LABELS_MAP);
 // lookup map of grade keys to their index positions
 const GRADE_KEY_TO_INDEX_MAP = {};
+
 for (const [index, gradeKey] of GRADE_KEYS.entries()) {
   GRADE_KEY_TO_INDEX_MAP[gradeKey] = index;
 }

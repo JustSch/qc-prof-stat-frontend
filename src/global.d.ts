@@ -27,9 +27,9 @@ declare global {
     class_section: string; // section number
     total_enrollment: number;
     instructor: string;
-    subject: string; // ie. CSCI
-    course_number: string;
-    course_desc: string; // course name eg. Data Structures
+    subject: string; // eg. CSCI
+    course_number: string; // eg. 313
+    course_desc: string; // course name, eg. Data Structures
   }
 
   type TGradeKey = keyof TLetterGradeData;

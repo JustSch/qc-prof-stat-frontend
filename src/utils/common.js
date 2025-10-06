@@ -26,7 +26,12 @@ export function groupClassResultsByInstructor(classResults) {
       const course = `${classItem.subject} ${classItem.course_number}`;
       coursesSet.add(course);
     }
-    classResults.uniqueCourses = [...coursesSet].toSorted();
+
+    // natsort so that lists like [CS 12, CS 120] get ordered correctly as [CS 12, CS 120]
+    // instead of alphabetical sorting [CS 120, CS 12]
+    classResults.uniqueCourses = [...coursesSet].toSorted((a, b) =>
+      new Intl.Collator("en", { numeric: true }).compare(a, b)
+    );
   }
 
   return groupedClassResults;

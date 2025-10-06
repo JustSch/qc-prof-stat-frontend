@@ -51,7 +51,10 @@ function groupClassesByCourse(classes) {
   }
 
   const sortedGrouped = {};
-  const sortedKeys = Object.keys(grouped).toSorted((a, b) => b.localeCompare(a));
+  // natsort in reverse order (b, a) so higher level courses appear on top of list
+  const sortedKeys = Object.keys(grouped).toSorted((a, b) =>
+    new Intl.Collator("en", { numeric: true }).compare(b, a)
+  );
   for (const key of sortedKeys) {
     sortedGrouped[key] = grouped[key];
   }
