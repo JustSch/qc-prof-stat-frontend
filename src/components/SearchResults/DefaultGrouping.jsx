@@ -34,10 +34,15 @@ export function DefaultGrouping({
   isCollapsed,
   onToggleCollapse,
 }) {
-  if (!instructorClasses) return null;
+  if (instructorClasses.length === 0) return null;
 
   return (
-    <Card className="mt-3 mb-3 shadow-sm border-0">
+    <Card
+      className="mt-3 mb-3 border-0"
+      style={{
+        boxShadow: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+      }}
+    >
       <Card.Header
         className="bg-primary bg-opacity-10 border-0 py-3"
         style={{ cursor: "pointer" }}
@@ -77,14 +82,12 @@ export function DefaultGrouping({
                     <div>
                       <h6 className="mb-1 text-dark">
                         {classItem.subject} {classItem.course_number}
-                        {classItem.course_desc && (
-                          <span
-                            className="text-muted ms-2"
-                            style={{ fontWeight: "normal", fontSize: "0.9em" }}
-                          >
-                            - {classItem.course_desc}
-                          </span>
-                        )}
+                        <span
+                          className="text-muted ms-2"
+                          style={{ fontWeight: "normal", fontSize: "0.9em" }}
+                        >
+                          - {classItem.course_desc}
+                        </span>
                       </h6>
                       <div className="text-muted small">
                         <FontAwesomeIcon icon={faHashtag} className="me-1" />

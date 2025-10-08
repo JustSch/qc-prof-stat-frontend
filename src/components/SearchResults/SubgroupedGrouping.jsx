@@ -20,7 +20,7 @@ import { buildClassResultPageUrl } from "@lib/utils/url-builder";
 /**
  * group classes by semester
  * @param {TClassResult[]} classes - array of class result objects
- * @returns {Record<string, TClassResult[]>} - object with semester names as keys and arrays of class results as values
+ * @returns {Record<string, TClassResult[]>} - mapping of: semester name -> class result objects
  */
 function groupClassesBySemester(classes) {
   const grouped = {};
@@ -38,7 +38,7 @@ function groupClassesBySemester(classes) {
 /**
  * group classes by subject + course_number
  * @param {TClassResult[]} classes - array of class result objects
- * @returns {Record<string, TClassResult[]>} - object with course names as keys and arrays of class results as values
+ * @returns {Record<string, TClassResult[]>} - mapping of: course name -> class result objects
  */
 function groupClassesByCourse(classes) {
   const grouped = {};
@@ -51,7 +51,10 @@ function groupClassesByCourse(classes) {
   }
 
   const sortedGrouped = {};
-  const sortedKeys = Object.keys(grouped).toSorted((a, b) => b.localeCompare(a));
+  // natsort in reverse order (b, a) so higher level courses appear on top of list
+  const sortedKeys = Object.keys(grouped).toSorted((a, b) =>
+    new Intl.Collator("en", { numeric: true }).compare(b, a)
+  );
   for (const key of sortedKeys) {
     sortedGrouped[key] = grouped[key];
   }
@@ -79,12 +82,16 @@ export function SubgroupedGrouping({
   isCollapsed,
   onToggleCollapse,
 }) {
-  if (!instructorClasses) return null;
+  if (instructorClasses.length === 0) return null;
 
   function getSubGroupIcon() {
     return subGroupType === "Semester" ? faCalendar : faBookOpen;
   }
 
+  /**
+   * @param {TClassResult[]} classes - array of class result objects
+   * @returns {Record<string, TClassResult[]>} - mapping of: subgroup name -> class result objects
+   */
   function getSubGroups(classes) {
     return subGroupType === "Semester"
       ? groupClassesBySemester(classes)
@@ -94,7 +101,7 @@ export function SubgroupedGrouping({
   const subGroups = getSubGroups(instructorClasses);
 
   return (
-    <Card className="mt-3 mb-3 shadow-sm border-0">
+    <Card className="mt-3 mb-3 border-0">
       <Card.Header
         className="bg-primary bg-opacity-10 border-0 py-3"
         style={{ cursor: "pointer" }}
@@ -156,14 +163,12 @@ export function SubgroupedGrouping({
                         <div>
                           <h6 className="mb-1 text-dark">
                             {classItem.subject} {classItem.course_number}
-                            {classItem.course_desc && (
-                              <span
-                                className="text-muted ms-2"
-                                style={{ fontWeight: "normal", fontSize: "0.9em" }}
-                              >
-                                - {classItem.course_desc}
-                              </span>
-                            )}
+                            <span
+                              className="text-muted ms-2"
+                              style={{ fontWeight: "normal", fontSize: "0.9em" }}
+                            >
+                              - {classItem.course_desc}
+                            </span>
                           </h6>
                           <div className="text-muted small">
                             <FontAwesomeIcon icon={faHashtag} className="me-1" />

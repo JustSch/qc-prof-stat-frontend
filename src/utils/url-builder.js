@@ -19,7 +19,7 @@ export function buildClassResultPageUrl(classResult) {
  * @returns {string}
  */
 export function buildInstructorApiUrl(instructorName) {
-  return "/api/instructor/" + instructorName;
+  return "/api/instructor/" + encodeURIComponent(instructorName);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const TIMEOUT_MS = 10 * 1000; // 10 seconds
+import { getRespErrorText } from "@lib/utils/http-utils";
 
 /**
  * @param {NextRouter} routerQuery
@@ -12,12 +12,6 @@ export function useNextFetch(routerQuery, url) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  function reset() {
-    setData(null);
-    setIsLoading(false);
-    setErrorMessage(null);
-  }
-
   useEffect(() => {
     if (Object.keys(routerQuery).length === 0) return;
 
@@ -28,7 +22,7 @@ export function useNextFetch(routerQuery, url) {
     fetch(url)
       .then(async (resp) => {
         if (!resp.ok) {
-          throw new Error(await getErrorText(resp));
+          throw new Error(await getRespErrorText(resp));
         }
 
         return resp.json();
@@ -37,39 +31,19 @@ export function useNextFetch(routerQuery, url) {
         setData(() => data);
       })
       .catch((error) => {
-        if (error.name === "AbortError") {
-          setErrorMessage(() => `Request timed out after ${TIMEOUT_MS / 1000} seconds`);
-        } else {
-          setData(() => null);
-          setErrorMessage(() => error.message);
-        }
+        setData(() => null);
+        setErrorMessage(() => error.message);
       })
       .finally(() => {
         setIsLoading(() => false);
       });
   }, [routerQuery, url]);
 
+  function reset() {
+    setData(() => null);
+    setIsLoading(() => false);
+    setErrorMessage(() => null);
+  }
+
   return { data, isLoading, errorMessage, reset };
-}
-
-async function getErrorText(resp) {
-  const respText = await resp.text();
-
-  if (!respText.trim()) {
-    return "An unexpected error occurred";
-  }
-
-  let respJson;
-  try {
-    respJson = JSON.parse(respText);
-  } catch {
-    return respText.trim();
-  }
-
-  if ("detail" in respJson) {
-    return respJson.detail;
-  }
-
-  // fallback to original text if JSON object not in expected format
-  return respText.trim();
 }
