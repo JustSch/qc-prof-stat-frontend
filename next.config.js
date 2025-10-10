@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    scrollRestoration: true,
+  },
   async rewrites() {
     return process.env.NODE_ENV === "development"
       ? [

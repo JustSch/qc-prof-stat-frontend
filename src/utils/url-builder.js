@@ -23,18 +23,33 @@ export function buildInstructorApiUrl(instructorName) {
 }
 
 /**
+ * Get class result arguments from query parameters
  * @param {Object} queryParams
- * @returns {string}
+ * @returns {Object} - Object containing class result arguments for API call
  */
-export function buildClassResultApiUrl(queryParams) {
-  // queryParams from the router may contain extra fields, so we only keep the relevant ones
-  const reducedQueryParams = new URLSearchParams({
+export function getclassResultArguments(queryParams) {
+  const classResultArguments = {
     instructor: queryParams.instructor,
     term: queryParams.term,
     subject: queryParams.subject,
     course_number: queryParams.course_number,
     class_section: queryParams.class_section,
-  });
+  };
+
+  if (Object.values(classResultArguments).includes(undefined)) {
+    return {};
+  }
+
+  return classResultArguments;
+}
+
+/**
+ * @param {Object} classResultArguments
+ * @returns {string}
+ */
+export function buildClassResultApiUrl(classResultArguments) {
+  // queryParams from the router may contain extra fields, so we only keep the relevant ones
+  const reducedQueryParams = new URLSearchParams(classResultArguments);
 
   return "/api/result/class/?" + reducedQueryParams.toString();
 }
