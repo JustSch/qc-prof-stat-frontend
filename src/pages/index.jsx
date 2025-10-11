@@ -142,7 +142,7 @@ export default function Page() {
               <span className="text-warning">QC</span> Prof Stat
             </h1>
             <p className="lead mb-4">
-              Discover grade distributions for{" "}
+              Explore grade distributions for{" "}
               <span className="text-warning fw-bold">Queens College</span> courses
             </p>
           </div>

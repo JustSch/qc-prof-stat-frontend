@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Head>
         <title>QC Prof Stat</title>
-        <meta name="description" content="Discover Queens College grade distributions" />
+        <meta name="description" content="Explore Queens College grade distributions" />
         <meta property="og:image" content="/qc-prof-stat-logo-200x185.png" />
         <meta property="og:type" content="website" />
       </Head>
