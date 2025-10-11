@@ -3,7 +3,6 @@ import { Bar, Doughnut } from "react-chartjs-2";
 
 import {
   BAR_GRAPH_OPTIONS,
-  SUMMARY_LABELS,
   createBarChartData,
   createDoughnutChartData,
   createDoughnutOptions,
@@ -29,18 +28,44 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
  * @param {TSummaryStats} props.summaryStats - Computed summary statistics
  */
 export function ClassResultChart({ classResult, summaryStats }) {
-  const { gradeLabels, gradeCounts, totalGradedStudents } = summaryStats;
+  const doughnutSummaryPoints = [
+    {
+      label: "Passing Letter Grades",
+      backgroundColor: "rgba(0,250,41,0.2)",
+      borderColor: "rgba(0, 250, 42, 0.4)",
+      value: summaryStats.totalPassingGrades,
+    },
+    {
+      label: "Unsatisfactory Letter Grades",
+      backgroundColor: "rgba(250,0,3,0.2)",
+      borderColor: "rgba(250, 0, 4, 0.34)",
+      // subtract passing grades, withdrawals, and incompletes from total enrollment
+      value:
+        classResult.total_enrollment -
+        summaryStats.totalPassingGrades -
+        Number.parseInt(classResult.Withdrawal) -
+        classResult.inc_ng,
+    },
+    {
+      label: "Withdrawals",
+      backgroundColor: "rgba(216,178,27,0.2)",
+      borderColor: "rgba(216, 178, 27, 0.49)",
+      value: Number.parseInt(classResult.Withdrawal),
+    },
+    {
+      label: "Incomplete",
+      backgroundColor: "rgba(126,126,126,0.2)",
+      borderColor: "rgba(126, 126, 126, 0.42)",
+      value: classResult.inc_ng,
+    },
+  ];
 
-  const barData = createBarChartData(gradeLabels, gradeCounts);
-  const doughnutData = createDoughnutChartData(SUMMARY_LABELS, [
-    totalGradedStudents,
-    Number.parseInt(classResult.Withdrawal),
-    classResult.inc_ng,
-  ]);
-
+  const barData = createBarChartData(summaryStats.gradeLabels, summaryStats.gradeCounts);
   const doughnutOptions = createDoughnutOptions(
     `Total Enrollment: ${classResult.total_enrollment} Students`
   );
+
+  const doughnutData = createDoughnutChartData(doughnutSummaryPoints);
 
   return (
     <Card className="border-0 shadow-sm py-4">
