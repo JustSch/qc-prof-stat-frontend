@@ -104,7 +104,13 @@ export function SubgroupedGrouping({
     <Card className="mt-3 mb-3 border-0">
       <Card.Header
         className="bg-primary bg-opacity-10 border-0 py-3"
-        style={{ cursor: "pointer" }}
+        style={{
+          cursor: "pointer",
+          position: "sticky",
+          top: "0",
+          zIndex: 10,
+          backdropFilter: "blur(8px)",
+        }}
         onClick={() => onToggleCollapse(instructorName)}
       >
         <div className="d-flex align-items-center">
