@@ -23,6 +23,9 @@ export default function Page() {
   });
 
   const [searchHistory, setSearchHistory] = useState([]);
+  const [groupingOption, setGroupingOption] = useState("Default");
+  const [collapsedInstructors, setCollapsedInstructors] = useState(new Set());
+  const [passingThreshold, setPassingThreshold] = useState("C");
 
   const searchInputRef = useRef(null);
   const searchFormRef = useRef(null);
@@ -229,7 +232,15 @@ export default function Page() {
                 )}
 
               {classSearchFetchState.data && (
-                <SearchResults classResults={classSearchFetchState.data} />
+                <SearchResults
+                  classResults={classSearchFetchState.data}
+                  passingThreshold={passingThreshold}
+                  setPassingThreshold={setPassingThreshold}
+                  groupingOption={groupingOption}
+                  setGroupingOption={setGroupingOption}
+                  collapsedInstructors={collapsedInstructors}
+                  setCollapsedInstructors={setCollapsedInstructors}
+                />
               )}
             </div>
           </div>
