@@ -28,19 +28,13 @@ export function buildInstructorApiUrl(instructorName) {
  * @returns {Object} - Object containing class result arguments for API call
  */
 export function getclassResultArguments(queryParams) {
-  const classResultArguments = {
+  return {
     instructor: queryParams.instructor,
     term: queryParams.term,
     subject: queryParams.subject,
     course_number: queryParams.course_number,
     class_section: queryParams.class_section,
   };
-
-  if (Object.values(classResultArguments).includes(undefined)) {
-    return {};
-  }
-
-  return classResultArguments;
 }
 
 /**
