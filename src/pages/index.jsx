@@ -9,16 +9,23 @@ import { faGraduationCap, faMagnifyingGlass } from "@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { SearchResults } from "@lib/components/SearchResults";
-import { useNextFetch } from "@lib/hooks/useNextFetch";
+import { useApiQuery } from "@lib/hooks/useApiQuery";
 import { buildInstructorApiUrl } from "@lib/utils/url-builder";
 
 const SEARCH_HISTORY_KEY = "qc-prof-stat-search-history";
 
 export default function Page() {
   const router = useRouter();
+  const url = buildInstructorApiUrl(router.query.q);
 
-  const classSearchFetchState = useNextFetch(router.query, buildInstructorApiUrl(router.query.q));
+  const classSearchFetchState = useApiQuery(["instructorSearch", router.query.q], url, {
+    enabled: router.isReady && router.query.q !== undefined,
+  });
+
   const [searchHistory, setSearchHistory] = useState([]);
+  const [groupingOption, setGroupingOption] = useState("Default");
+  const [collapsedInstructors, setCollapsedInstructors] = useState(new Set());
+  const [passingThreshold, setPassingThreshold] = useState("C");
 
   const searchInputRef = useRef(null);
   const searchFormRef = useRef(null);
@@ -26,8 +33,6 @@ export default function Page() {
   const MAX_SEARCH_HISTORY = 10;
 
   useEffect(() => {
-    searchInputRef.current.focus();
-
     // load search history from localStorage on mount
     try {
       const savedHistory = localStorage.getItem(SEARCH_HISTORY_KEY);
@@ -40,18 +45,24 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    // populate search input from url query params
     if (searchInputRef.current.value === "" && router.query.q) {
       searchInputRef.current.value = router.query.q;
     }
-  }, [router.query.q]);
 
-  // reset search results when navigating to home page back from a query
-  useEffect(() => {
-    if (!router.query.q && (classSearchFetchState.data || classSearchFetchState.errorMessage)) {
-      classSearchFetchState.reset();
+    // clear search input when navigating away from search
+    if (!router.query.q) {
       searchInputRef.current.value = "";
     }
-  }, [router.query.q, classSearchFetchState]);
+  }, [router.query.q]);
+
+  useEffect(() => {
+    // focus search input if it's empty
+    if (router.isReady && searchInputRef.current.value.trim() === "") {
+      console.log("Focusing search input");
+      searchInputRef.current.focus();
+    }
+  }, [router.isReady]);
 
   // save search history to localStorage
   function saveSearchHistory(history) {
@@ -101,6 +112,7 @@ export default function Page() {
     const params = new URLSearchParams({ q: searchValue });
     const href = `/?${params.toString()}`;
 
+    // Update URL - React Query will automatically fetch when query key changes
     router.push(href, undefined, { shallow: true });
   }
 
@@ -133,7 +145,7 @@ export default function Page() {
               <span className="text-warning">QC</span> Prof Stat
             </h1>
             <p className="lead mb-4">
-              Discover grade distributions for{" "}
+              Explore grade distributions for{" "}
               <span className="text-warning fw-bold">Queens College</span> courses
             </p>
           </div>
@@ -220,7 +232,15 @@ export default function Page() {
                 )}
 
               {classSearchFetchState.data && (
-                <SearchResults classResults={classSearchFetchState.data} />
+                <SearchResults
+                  classResults={classSearchFetchState.data}
+                  passingThreshold={passingThreshold}
+                  setPassingThreshold={setPassingThreshold}
+                  groupingOption={groupingOption}
+                  setGroupingOption={setGroupingOption}
+                  collapsedInstructors={collapsedInstructors}
+                  setCollapsedInstructors={setCollapsedInstructors}
+                />
               )}
             </div>
           </div>

@@ -1,3 +1,4 @@
 export { DefaultGrouping } from "./DefaultGrouping";
-export { SubgroupedGrouping } from "./SubgroupedGrouping";
+export { SearchResultControls } from "./SearchResultControls";
 export { SearchResults } from "./SearchResults";
+export { SubgroupedGrouping } from "./SubgroupedGrouping";

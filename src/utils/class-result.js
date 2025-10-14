@@ -20,8 +20,6 @@ export const GRADE_VALUES_TO_LABELS_MAP = {
   F: "F",
 };
 
-export const SUMMARY_LABELS = ["Received Grade", "Withdrawals", "Incomplete"];
-
 const GRADE_KEYS = Object.keys(GRADE_VALUES_TO_LABELS_MAP);
 // lookup map of grade keys to their index positions
 const GRADE_KEY_TO_INDEX_MAP = {};
@@ -84,19 +82,18 @@ export function createBarChartData(labels, dataValues) {
 
 /**
  * Build a Chart.js doughnut chart data object for summary categories.
- * @param {string[]} labels - Labels for the doughnut slices
- * @param {number[]} dataValues - Numeric values for each slice
+ * @param {Array<{label: string, backgroundColor: string, borderColor: string, value: number}>} chartConfig - Chart configuration
  * @returns {Object} - Chart.js doughnut data object
  */
-export function createDoughnutChartData(labels, dataValues) {
+export function createDoughnutChartData(chartConfig) {
   return {
-    labels: labels,
+    labels: chartConfig.map((config) => config.label),
     datasets: [
       {
         label: "# of Individual Grades",
-        data: dataValues,
-        backgroundColor: ["rgba(0,250,41,0.2)", "rgba(250,0,3,0.2)", "rgba(216,178,27,0.2)"],
-        borderColor: ["rgba(0,250,41,1)", "rgba(250,0,3,1)", "rgba(216,178,27,1)"],
+        data: chartConfig.map((config) => config.value),
+        backgroundColor: chartConfig.map((config) => config.backgroundColor),
+        borderColor: chartConfig.map((config) => config.borderColor),
         borderWidth: 2,
       },
     ],
