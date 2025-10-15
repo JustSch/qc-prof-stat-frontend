@@ -68,8 +68,8 @@ export default function Page() {
             </Container>
           </div>
 
-          <Container className="py-4">
-            <Row className="mb-4">
+          <Container className="py-2">
+            <Row className="mb-2 g-2 g-md-3">
               <ClassResultSummaryStats classResult={classResult} summaryStats={summaryStats} />
             </Row>
           </Container>

@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export function ClassResultSummaryStats({ classResult: classResult, summaryStats }) {
   return (
     <>
-      <div className="col-lg-3 col-md-6 mb-3">
+      <div className="col-lg-3 col-md-6 col-6 mb-2 mb-md-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
             <FontAwesomeIcon icon={faUsers} className="text-primary fs-1 mb-2" />
@@ -26,7 +26,7 @@ export function ClassResultSummaryStats({ classResult: classResult, summaryStats
           </Card.Body>
         </Card>
       </div>
-      <div className="col-lg-3 col-md-6 mb-3">
+      <div className="col-lg-3 col-md-6 col-6 mb-2 mb-md-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
             <FontAwesomeIcon icon={faBookOpen} className="text-success fs-1 mb-2" />
@@ -35,7 +35,7 @@ export function ClassResultSummaryStats({ classResult: classResult, summaryStats
           </Card.Body>
         </Card>
       </div>
-      <div className="col-lg-3 col-md-6 mb-3">
+      <div className="col-lg-3 col-md-6 col-6 mb-2 mb-md-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-warning fs-1 mb-2" />
@@ -44,7 +44,7 @@ export function ClassResultSummaryStats({ classResult: classResult, summaryStats
           </Card.Body>
         </Card>
       </div>
-      <div className="col-lg-3 col-md-6 mb-3">
+      <div className="col-lg-3 col-md-6 col-6 mb-2 mb-md-3">
         <Card className="border-0 shadow-sm h-100">
           <Card.Body className="text-center">
             <FontAwesomeIcon icon={faPause} className="text-info fs-1 mb-2" />
