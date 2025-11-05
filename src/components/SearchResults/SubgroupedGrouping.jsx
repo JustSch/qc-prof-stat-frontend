@@ -101,7 +101,12 @@ export function SubgroupedGrouping({
   const subGroups = getSubGroups(instructorClasses);
 
   return (
-    <Card className="mt-3 mb-3 border-0">
+    <Card
+      className="mt-3 mb-3 border-0"
+      style={{
+        boxShadow: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+      }}
+    >
       <Card.Header
         className="bg-primary bg-opacity-10 border-0 py-3"
         style={{
