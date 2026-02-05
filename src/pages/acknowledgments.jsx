@@ -7,7 +7,7 @@ import { faCode, faDatabase, faHandHoldingHeart, faHeart } from "@fortawesome/fr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Page() {
-  const termLastUpdated = "Summer 2025";
+  const termLastUpdated = "Fall 2025";
 
   const teamMembers = [
     {
