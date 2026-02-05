@@ -116,6 +116,9 @@ export function createDoughnutOptions(title) {
             return datasets[0].data.map((data, i) => ({
               text: `${chart.data.labels[i]}: ${data} Students`,
               fillStyle: datasets[0].backgroundColor[i],
+              // gray color to stand out in both light and dark modes; mainly for darkreader compatibility
+              // since the chart labels are pre-rendered and not affected by CSS
+              fontColor: "#6d6d6d",
             }));
           },
         },
